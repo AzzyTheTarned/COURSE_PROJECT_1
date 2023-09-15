@@ -13,6 +13,7 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    data_structures.h \
     mainwindow.h \
     records.h
 
