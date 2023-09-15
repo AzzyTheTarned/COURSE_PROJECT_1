@@ -4,74 +4,42 @@
 
 /* Assigned to Alexey Aliferov */
 struct Client {
-    std::string surname;
     std::string name;
-    std::string patronymic;
-    std::string day;
-    std::string month;
-    std::string year;
+    std::string birthday;
     std::string phone_number;
     std::string ID;
 
     bool operator== (Client &other) {
         return
-            this->surname == other.surname &&
             this->name == other.name &&
-            this->patronymic == other.patronymic &&
-            this->day == other.day &&
-            this->month == other.month &&
-            this->year == other.year &&
+            this->birthday == other.birthday &&
             this->phone_number == other.phone_number &&
             this->ID == other.ID;
     }
 
     bool operator!= (Client &other) {
         return
-            this->surname != other.surname ||
             this->name != other.name ||
-            this->patronymic != other.patronymic ||
-            this->day != other.day ||
-            this->month != other.month ||
-            this->year != other.year ||
+            this->birthday != other.birthday ||
             this->phone_number != other.phone_number ||
             this->ID != other.ID;
     }
 
     bool operator< (Client &other) {
-        if (this->surname < other.surname) {
+        if (this->name < other.name) {
             return true;
         }
-        else if (this->surname == other.surname) {
-            if (this->name < other.name) {
+        else if (this->name == other.name) {
+            if (this->birthday < other.birthday) {
                 return true;
             }
-            else if (this->name == other.name) {
-                if (this->patronymic < other.patronymic) {
+            else if (this->birthday == other.birthday) {
+                if (this->phone_number < other.phone_number) {
                     return true;
                 }
-                else if (this->patronymic == other.patronymic) {
-                    if (this->day < other.day) {
+                else if (this->phone_number == other.phone_number) {
+                    if (this->ID < other.ID) {
                         return true;
-                    }
-                    else if (this->day == other.day) {
-                        if (this->month < other.month) {
-                            return true;
-                        }
-                        else if (this->month == other.month) {
-                            if (this->year < other.year) {
-                                return true;
-                            }
-                            else if (this->year == other.year) {
-                                if (this->phone_number < other.phone_number) {
-                                    return true;
-                                }
-                                else if (this->phone_number == other.phone_number) {
-                                    if (this->ID < other.ID) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -80,40 +48,20 @@ struct Client {
     }
 
     bool operator> (Client &other) {
-        if (this->surname > other.surname) {
+        if (this->name > other.name) {
             return true;
         }
-        else if (this->surname == other.surname) {
-            if (this->name > other.name) {
+        else if (this->name == other.name) {
+            if (this->birthday > other.birthday) {
                 return true;
             }
-            else if (this->name == other.name) {
-                if (this->patronymic > other.patronymic) {
+            else if (this->birthday == other.birthday) {
+                if (this->phone_number > other.phone_number) {
                     return true;
                 }
-                else if (this->patronymic == other.patronymic) {
-                    if (this->day > other.day) {
+                else if (this->phone_number == other.phone_number) {
+                    if (this->ID > other.ID) {
                         return true;
-                    }
-                    else if (this->day == other.day) {
-                        if (this->month > other.month) {
-                            return true;
-                        }
-                        else if (this->month == other.month) {
-                            if (this->year > other.year) {
-                                return true;
-                            }
-                            else if (this->year == other.year) {
-                                if (this->phone_number > other.phone_number) {
-                                    return true;
-                                }
-                                else if (this->phone_number == other.phone_number) {
-                                    if (this->ID > other.ID) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
@@ -132,18 +80,14 @@ struct Client {
 
 /* Assigned to Alexey Popov */
 struct Agent {
-    std::string surname;
     std::string name;
-    std::string patronymic;
     std::string fee_share;
     std::string phone_number;
     std::string ID;
 
     bool operator== (Agent &other) {
         return
-            this->surname == other.surname &&
             this->name == other.name &&
-            this->patronymic == other.patronymic &&
             this->fee_share == other.fee_share &&
             this->phone_number == other.phone_number &&
             this->ID == other.ID;
@@ -151,39 +95,27 @@ struct Agent {
 
     bool operator!= (Agent &other) {
         return
-            this->surname != other.surname ||
             this->name != other.name ||
-            this->patronymic != other.patronymic ||
             this->fee_share != other.fee_share ||
             this->phone_number != other.phone_number ||
             this->ID != other.ID;
     }
 
     bool operator< (Agent &other) {
-        if (this->surname < other.surname) {
+        if (this->name < other.name) {
             return true;
         }
-        else if (this->surname == other.surname) {
-            if (this->name < other.name) {
+        else if (this->name == other.name) {
+            if (this->fee_share < other.fee_share) {
                 return true;
             }
-            else if (this->name == other.name) {
-                if (this->patronymic < other.patronymic) {
+            else if (this->fee_share == other.fee_share) {
+                if (this->phone_number < other.phone_number) {
                     return true;
                 }
-                else if (this->patronymic == other.patronymic) {
-                    if (this->fee_share < other.fee_share) {
+                else if (this->phone_number == other.phone_number) {
+                    if (this->ID < other.ID) {
                         return true;
-                    }
-                    else if (this->fee_share == other.fee_share) {
-                        if (this->phone_number < other.phone_number) {
-                            return true;
-                        }
-                        else if (this->phone_number == other.phone_number) {
-                            if (this->ID < other.ID) {
-                                return true;
-                            }
-                        }
                     }
                 }
             }
@@ -192,30 +124,20 @@ struct Agent {
     }
 
     bool operator> (Agent &other) {
-        if (this->surname > other.surname) {
+        if (this->name > other.name) {
             return true;
         }
-        else if (this->surname == other.surname) {
-            if (this->name > other.name) {
+        else if (this->name == other.name) {
+            if (this->fee_share > other.fee_share) {
                 return true;
             }
-            else if (this->name == other.name) {
-                if (this->patronymic > other.patronymic) {
+            else if (this->fee_share == other.fee_share) {
+                if (this->phone_number > other.phone_number) {
                     return true;
                 }
-                else if (this->patronymic == other.patronymic) {
-                    if (this->fee_share > other.fee_share) {
+                else if (this->phone_number == other.phone_number) {
+                    if (this->ID > other.ID) {
                         return true;
-                    }
-                    else if (this->fee_share == other.fee_share) {
-                        if (this->phone_number > other.phone_number) {
-                            return true;
-                        }
-                        else if (this->phone_number == other.phone_number) {
-                            if (this->ID > other.ID) {
-                                return true;
-                            }
-                        }
                     }
                 }
             }
@@ -227,7 +149,9 @@ struct Agent {
         return this < &other || this == &other;
     }
 
-
+    bool operator>= (Agent &other) {
+        return this > &other || this == &other;
+    }
 };
 
 /* Assigned to Miroslav Alekseev */
