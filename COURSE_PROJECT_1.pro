@@ -14,6 +14,7 @@ SOURCES += \
 
 HEADERS += \
     data_structures.h \
+    directories.h \
     mainwindow.h \
     records.h
 
