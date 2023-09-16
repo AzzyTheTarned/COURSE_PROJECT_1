@@ -111,10 +111,8 @@ public:
         if (isEmpty()) return;
         NodeClientList* p = head;
         while (p != nullptr) {
-            std::cout << p->val.surname << " " << p->val.name <<
-                " " << p->val.patronymic << " - Birthday: " << p->val.day << "." <<
-                p->val.month << "." << p->val.year << " - Phone number: " <<
-                p->val.phone_number << " - ID: " << p->val.ID << std::endl;
+            std::cout << p->val.name << " - Birthday: " << p->val.birthday << " - Phone number: "
+            << p->val.phone_number << " - ID: " << p->val.ID << std::endl;
             p = p->next;
         }
         std::cout << std::endl;
