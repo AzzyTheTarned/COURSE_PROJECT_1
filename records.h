@@ -7,9 +7,9 @@ struct Client {
     std::string name;
     std::string birthday;
     std::string phone_number;
-    std::string ID;
+    int ID;
 
-    bool operator== (Client &other) {
+    bool operator== (const Client &other) const {
         return
             this->name == other.name &&
             this->birthday == other.birthday &&
@@ -17,7 +17,7 @@ struct Client {
             this->ID == other.ID;
     }
 
-    bool operator!= (Client &other) {
+    bool operator!= (const Client &other) const {
         return
             this->name != other.name ||
             this->birthday != other.birthday ||
@@ -25,7 +25,7 @@ struct Client {
             this->ID != other.ID;
     }
 
-    bool operator< (Client &other) {
+    bool operator< (const Client &other) const {
         if (this->name < other.name) {
             return true;
         }
@@ -47,7 +47,7 @@ struct Client {
         return false;
     }
 
-    bool operator> (Client &other) {
+    bool operator> (const Client &other) const {
         if (this->name > other.name) {
             return true;
         }
@@ -69,11 +69,11 @@ struct Client {
         return false;
     }
 
-    bool operator<= (Client &other) {
+    bool operator<= (const Client &other) const {
         return this < &other || this == &other;
     }
 
-    bool operator>= (Client &other) {
+    bool operator>= (const Client &other) const {
         return this > &other || this == &other;
     }
 };
@@ -83,9 +83,9 @@ struct Agent {
     std::string name;
     std::string fee_share;
     std::string phone_number;
-    std::string ID;
+    int ID;
 
-    bool operator== (Agent &other) {
+    bool operator== (const Agent &other) const {
         return
             this->name == other.name &&
             this->fee_share == other.fee_share &&
@@ -93,7 +93,7 @@ struct Agent {
             this->ID == other.ID;
     }
 
-    bool operator!= (Agent &other) {
+    bool operator!= (const Agent &other) const {
         return
             this->name != other.name ||
             this->fee_share != other.fee_share ||
@@ -101,7 +101,7 @@ struct Agent {
             this->ID != other.ID;
     }
 
-    bool operator< (Agent &other) {
+    bool operator< (const Agent &other) const {
         if (this->name < other.name) {
             return true;
         }
@@ -123,7 +123,7 @@ struct Agent {
         return false;
     }
 
-    bool operator> (Agent &other) {
+    bool operator> (const Agent &other) const {
         if (this->name > other.name) {
             return true;
         }
@@ -145,11 +145,11 @@ struct Agent {
         return false;
     }
 
-    bool operator<= (Agent &other) {
+    bool operator<= (const Agent &other) const {
         return this < &other || this == &other;
     }
 
-    bool operator>= (Agent &other) {
+    bool operator>= (const Agent &other) const {
         return this > &other || this == &other;
     }
 };
@@ -158,10 +158,10 @@ struct Agent {
 struct Insurance {
     std::string type;
     std::string cost;
-    std::string client_ID;
-    std::string agent_ID;
+    int client_ID;
+    int agent_ID;
 
-    bool operator== (Insurance &other) {
+    bool operator== (const Insurance &other) const {
         return
             this->type == other.type &&
             this->cost == other.cost &&
@@ -169,7 +169,7 @@ struct Insurance {
             this->agent_ID == other.agent_ID;
     }
 
-    bool operator!= (Insurance &other) {
+    bool operator!= (const Insurance &other) const {
         return
             this->type != other.type ||
             this->cost != other.cost ||
@@ -177,7 +177,7 @@ struct Insurance {
             this->agent_ID != other.agent_ID;
     }
 
-    bool operator< (Insurance &other) {
+    bool operator< (const Insurance &other) const {
         if (this->type < other.type) {
             return true;
         }
@@ -199,7 +199,7 @@ struct Insurance {
         return false;
     }
 
-    bool operator> (Insurance &other) {
+    bool operator> (const Insurance &other) const {
         if (this->type > other.type) {
             return true;
         }
@@ -221,11 +221,11 @@ struct Insurance {
         return false;
     }
 
-    bool operator<= (Insurance &other) {
+    bool operator<= (const Insurance &other) const {
         return this < &other || this == &other;
     }
 
-    bool operator>= (Insurance &other) {
+    bool operator>= (const Insurance &other) const {
         return this > &other || this == &other;
     }
 };
