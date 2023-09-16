@@ -120,20 +120,6 @@ public:
         std::cout << std::endl;
     }
 };
-ClientList join(ClientList a, ClientList b) {
-    ClientList temp;
-    NodeClientList* pa = a.head;
-    NodeClientList* pb = b.head;
-    while (pa != nullptr) {
-        temp.push(pa->val);
-        pa = pa->next;
-    }
-    while (pb != nullptr) {
-        temp.push(pb->val);
-        pb = pb->next;
-    }
-    return temp;
-}
 
 /*
 Data structures for Agents directory
