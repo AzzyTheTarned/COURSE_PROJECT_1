@@ -13,7 +13,9 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
-    data_structures.h \
+    clientsHash.h \
+    clientsRecord.h \
+    clientsTree.h \
     directories.h \
     mainwindow.h \
     records.h

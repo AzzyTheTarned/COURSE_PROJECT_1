@@ -1,12 +1,8 @@
-#ifndef DATA_STRUCTURES_H
-#define DATA_STRUCTURES_H
-#include "records.h"
+#ifndef CLIENTSHASH_H
+#define CLIENTSHASH_H
+#include "clientsRecord.h"
 #include <iostream>
 
-/*
-Data structures for Clients directory
-Assigned to Alexey Aliferov
-*/
 class ClientHashTable {
     constexpr static const double rescale_factor = 0.75; // коэффициент ремасштабирования таблицы
     struct NodeClientHashTable {
@@ -20,6 +16,9 @@ class ClientHashTable {
     int size_with_deleted; // сколько элементов в таблице С удалёнными //
     int capacity; // сколько места в таблице //
 
+    int primaryHash(int key) {
+        return key % capacity;
+    }
     int primaryHash(const Client& _record) {
         return _record.ID % capacity;
     }
@@ -63,6 +62,21 @@ class ClientHashTable {
         }
         return first_deleted == -1 ? h : first_deleted;
     }
+    int findIndex(int _key) {
+        int h = primaryHash(_key);
+        int i = 1;
+        int first_deleted = -1;
+        while ((table[h] != nullptr) && (i <= capacity)) {
+            if ((table[h]->record.ID == _key) && (table[h]->status)) {
+                return h;
+            }
+            if (table[h]->status == false && first_deleted == -1)
+                first_deleted = h;
+            h = secondaryHash(primaryHash(_key), i) % capacity;
+            ++i;
+        }
+        return first_deleted == -1 ? h : first_deleted;
+    }
 public:
     ClientHashTable(int default_capacity) {
         capacity = default_capacity;
@@ -82,12 +96,25 @@ public:
         delete[] table;
     }
 
+    int Search(int _key) {
+        int index = findIndex(_key);
+        return table[index] != nullptr && table[index]->status ? index : -1;
+    }
     int Search(const Client& _record) {
         int index = findIndex(_record);
         return table[index] != nullptr && table[index]->status ? index : -1;
     }
     int Delete(const Client& _record) {
         int index = findIndex(_record);
+        if (table[index] != nullptr && table[index]->status) {
+            table[index]->status = false;
+            --size;
+            return index;
+        }
+        return -1;
+    }
+    int Delete(int _key) {
+        int index = findIndex(_key);
         if (table[index] != nullptr && table[index]->status) {
             table[index]->status = false;
             --size;
@@ -123,134 +150,13 @@ public:
             }
             else if (table[i]->status) {
                 std::cout << i << ": " << " [STATUS 1] " << table[i]->record.name << " - Birthday: "
-                << table[i]->record.birthday << " - Phone number: "
-                << table[i]->record.phone_number << " - ID: " << table[i]->record.ID << std::endl;
+                          << table[i]->record.birthday << " - Phone number: "
+                          << table[i]->record.phone_number << " - ID: " << table[i]->record.ID << std::endl;
             }
             else std::cout << i << ": " << " [STATUS 2]" << std::endl;
         }
         std::cout << std::endl;
     }
 };
-struct NodeClientList {
-    Client val;
-    NodeClientList* next;
-    NodeClientList(Client _val) : val(_val), next(nullptr){};
-};
-struct ClientList {
-    NodeClientList* head;
-    ClientList() : head(nullptr) {}
 
-private:
-    bool isEmpty() {
-        return head == nullptr;
-    }
-    bool isOneItem() {
-        return isEmpty() ? false : head->next == nullptr;
-    }
-    void removeFirst() {
-        if (isEmpty()) return;
-        if (isOneItem()) {
-            delete head;
-            head = nullptr;
-            return;
-        }
-        NodeClientList* p = head;
-        head = p->next;
-        delete p;
-    }
-    void removeLast() {
-        if (isEmpty()) return;
-        if (isOneItem()) {
-            delete head;
-            head = nullptr;
-            return;
-        }
-        NodeClientList* p = head;
-        while (p->next->next != nullptr) p = p->next;
-        delete p->next;
-        p->next = nullptr;
-    }
-    NodeClientList* pushFirst(Client _val) {
-        NodeClientList* p = new NodeClientList(_val);
-        if (isEmpty()) {
-            head = p;
-            return p;
-        }
-        p->next = head;
-        head = p;
-        return p;
-    }
-    NodeClientList* pushLast(Client _val) {
-        NodeClientList* p = new NodeClientList(_val);
-        if (isEmpty()) {
-            head = p;
-            return p;
-        }
-        NodeClientList* i = head;
-        while (i->next != nullptr) i = i->next;
-        i->next = p;
-        return p;
-    }
-public:
-    void flush() {
-        while (!isEmpty()) removeFirst();
-    }
-    void remove(Client _val) {
-        if (isEmpty()) return;
-        if (isOneItem()) {
-            if (head->val == _val) removeFirst();
-            return;
-        }
-        NodeClientList* p = head;
-        while (p->next != nullptr && p->next->val != _val) p = p->next;
-        if (p->next == nullptr) return;
-        NodeClientList* toDel = p->next;
-        p->next = p->next->next;
-        delete toDel;
-    }
-    NodeClientList* push(Client _val) {
-        if (isEmpty()) {
-            return pushFirst(_val);
-        }
-        if (_val < head->val) {
-            return pushFirst(_val);
-        }
-        if (_val == head->val) {
-            return nullptr;
-        }
-        NodeClientList* p = head;
-        while (p->next != nullptr && p->next->val <= _val) p = p->next;
-        if (p->val == _val) return nullptr;
-        NodeClientList* toAdd = new NodeClientList(_val);
-        toAdd->next = p->next;
-        p->next = toAdd;
-        return toAdd;
-    }
-    NodeClientList* find(Client _val) {
-        NodeClientList* p = head;
-        while (p != nullptr && p->val != _val) p = p->next;
-        return p;
-    }
-    void print() {
-        if (isEmpty()) return;
-        NodeClientList* p = head;
-        while (p != nullptr) {
-            std::cout << p->val.name << " - Birthday: " << p->val.birthday << " - Phone number: "
-            << p->val.phone_number << " - ID: " << p->val.ID << std::endl;
-            p = p->next;
-        }
-        std::cout << std::endl;
-    }
-};
-
-/*
-Data structures for Agents directory
-Assigned to Alexey Popov
-*/
-
-/*
-Data structures for Insurance directory
-Assigned to Miroslav Alekseev
-*/
-
-#endif // DATA_STRUCTURES_H
+#endif // CLIENTSHASH_H
