@@ -1,4 +1,0 @@
-#ifndef INSURANCESHASH_H
-#define INSURANCESHASH_H
-
-#endif // INSURANCESHASH_H

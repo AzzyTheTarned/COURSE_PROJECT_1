@@ -17,11 +17,7 @@ HEADERS += \
     clientsRecord.h \
     clientsTree.h \
     directories.h \
-    insurancesHash.h \
-    insurancesRecord.h \
-    insurancesTree.h \
-    mainwindow.h \
-    records.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui
