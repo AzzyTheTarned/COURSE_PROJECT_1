@@ -2,6 +2,7 @@
 #define DIRECTORIES_H
 #include "clientsTree.h"
 #include "clientsHash.h"
+#include "insurancesTree.h"
 
 /* Assigned to Alexey Aliferov */
 struct ClientsDir {
@@ -19,7 +20,8 @@ struct AgentsDir {
 
 /* Assigned to Miroslav Alekseev */
 struct InsurancesDir {
-
+    std::vector<Insurance> insurancesVector;
+    tree insuranceTree;
 };
 
 #endif // DIRECTORIES_H
