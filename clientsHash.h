@@ -15,6 +15,7 @@ class ClientHashTable {
     int size; // сколько элементов в таблице (без удаленных) //
     int size_with_deleted; // сколько элементов в таблице С удалёнными //
     int capacity; // сколько места в таблице //
+    int start_capacity;
 
     int primaryHash(int key) {
         return key % capacity;
@@ -78,8 +79,14 @@ class ClientHashTable {
         return first_deleted == -1 ? h : first_deleted;
     }
 public:
+
+    int getStartCapacity() {
+        return start_capacity;
+    }
+
     ClientHashTable(int default_capacity) {
         capacity = default_capacity;
+        start_capacity = default_capacity;
         size = 0;
         size_with_deleted = 0;
         table = new NodeClientHashTable*[capacity];
@@ -95,6 +102,7 @@ public:
         }
         delete[] table;
     }
+
 
     int Search(int _key) {
         int index = findIndex(_key);
