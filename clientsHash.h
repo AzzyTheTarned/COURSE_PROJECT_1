@@ -17,11 +17,25 @@ class ClientHashTable {
     int capacity; // сколько места в таблице //
     int start_capacity;
 
-    int primaryHash(int key) {
-        return key % capacity;
+    // int primaryHash(int key) {
+    //     return key % capacity;
+    // }
+    int primaryHash(std::string key) {
+        int hash = 0;
+        for (int i = 0; i < key.length(); ++i) {
+            hash += key[i];
+        }
+        return hash % capacity;
     }
+    // int primaryHash(const Client& _record) {
+    //     return _record.ID % capacity;
+    // }
     int primaryHash(const Client& _record) {
-        return _record.ID % capacity;
+        int hash = 0;
+        for (int i = 0; i < _record.ID.length(); ++i) {
+            hash += _record.ID[i];
+        }
+        return hash % capacity;
     }
     int secondaryHash(int primary_hash, int attempt) {
         return (primary_hash + (attempt * 1));
@@ -63,7 +77,7 @@ class ClientHashTable {
         }
         return first_deleted == -1 ? h : first_deleted;
     }
-    int findIndex(int _key) {
+    int findIndex(std::string _key) {
         int h = primaryHash(_key);
         int i = 1;
         int first_deleted = -1;
@@ -79,11 +93,23 @@ class ClientHashTable {
         return first_deleted == -1 ? h : first_deleted;
     }
 public:
-
+    NodeClientHashTable** getTable() {
+        return table;
+    }
     int getStartCapacity() {
         return start_capacity;
     }
 
+    ClientHashTable() {
+        capacity = 10;
+        start_capacity = 10;
+        size = 0;
+        size_with_deleted = 0;
+        table = new NodeClientHashTable*[capacity];
+        for (int i = 0; i < capacity; ++i) {
+            table[i] = nullptr;
+        }
+    }
     ClientHashTable(int default_capacity) {
         capacity = default_capacity;
         start_capacity = default_capacity;
@@ -104,7 +130,7 @@ public:
     }
 
 
-    int Search(int _key) {
+    int Search(std::string _key) {
         int index = findIndex(_key);
         return table[index] != nullptr && table[index]->status ? index : -1;
     }
@@ -121,7 +147,7 @@ public:
         }
         return -1;
     }
-    int Delete(int _key) {
+    int Delete(std::string _key) {
         int index = findIndex(_key);
         if (table[index] != nullptr && table[index]->status) {
             table[index]->status = false;
@@ -164,6 +190,21 @@ public:
             else std::cout << i << ": " << " [STATUS 2]" << std::endl;
         }
         std::cout << std::endl;
+    }
+    void flush() {
+        for (int i = 0; i < capacity; ++i) {
+            if (table[i]) {
+                delete table[i];
+            }
+        }
+        delete[] table;
+        capacity = start_capacity;
+        size = 0;
+        size_with_deleted = 0;
+        table = new NodeClientHashTable*[capacity];
+        for (int i = 0; i < capacity; ++i) {
+            table[i] = nullptr;
+        }
     }
 };
 

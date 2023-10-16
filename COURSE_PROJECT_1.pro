@@ -17,6 +17,10 @@ HEADERS += \
     clientsRecord.h \
     clientsTree.h \
     directories.h \
+    insurancesHash.h \
+    insurancesList.h \
+    insurancesRecord.h \
+    insurancesTree.h \
     mainwindow.h
 
 FORMS += \

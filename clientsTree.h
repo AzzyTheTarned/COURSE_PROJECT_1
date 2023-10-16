@@ -132,6 +132,16 @@ public:
         }
         // std::cout << std::endl;
     }
+
+    int size() {
+        int count = 0;
+        NodeClientList* p = head;
+        while (p != nullptr) {
+            count++;
+            p = p->next;
+        }
+        return count;
+    }
 };
 
 // int compare_string(std::string s1, std::string s2) {
@@ -167,7 +177,15 @@ const std::function<int(Client, std::string)> compareToPhone = [](Client c, std:
     // return compare_string(c.phone_number, s);
     return -(c.phone_number.compare(s));
 };
-
+const std::function<std::string(Client)> getName = [](Client c) -> std::string {
+    return c.name;
+};
+const std::function<std::string(Client)> getBirthday = [](Client c) -> std::string {
+    return c.birthday;
+};
+const std::function<std::string(Client)> getPhone = [](Client c) -> std::string {
+    return c.phone_number;
+};
 
 struct NodeClientTree {
     ClientList val;
@@ -178,8 +196,9 @@ struct NodeClientTree {
 };
 
 struct ClientTree {
-    ClientTree(std::function<int(Client, Client)> _full_comparator, std::function<int(Client, std::string)> _semi_comparator)
-    : full_comparator(_full_comparator), semi_comparator(_semi_comparator)
+    ClientTree(std::function<int(Client, Client)> _full_comparator, std::function<int(Client, std::string)> _semi_comparator
+               , std::function<std::string(Client)> _print_getter)
+        : full_comparator(_full_comparator), semi_comparator(_semi_comparator), print_getter(_print_getter)
     {
         TNULL = new NodeClientTree;
         TNULL->color = 0;
@@ -194,6 +213,7 @@ private:
     NodeClientTree* TNULL;
     std::function<int(Client, Client)> full_comparator;
     std::function<int(Client, std::string)> semi_comparator;
+    std::function<std::string(Client)> print_getter;
 
     void preOrderBase(NodeClientTree* node) {
         if (node != TNULL) {
@@ -228,6 +248,19 @@ private:
             return searchTreeBase(node->left, key);
         }
         return searchTreeBase(node->right, key);
+    }
+
+    int countSearchComparisonsBase(NodeClientTree* node, std::string key) {
+        int count = 1;
+        while (node != TNULL && semi_comparator(node->val.head->val, key) != 0) {
+            if (semi_comparator(node->val.head->val, key) <= 0) {
+                node = node->left;
+            } else {
+                node = node->right;
+            }
+            count++;
+        }
+        return count;
     }
 
     void fixDelete(NodeClientTree* x) {
@@ -423,8 +456,9 @@ private:
             }
 
             std::string sColor = root->color?"RED":"BLACK";
-            // std::cout << "{" << getHours(root) << ":" << getMinutes(root) << "}" << "(" << sColor << ")" << std::endl;
-            root->val.printInLine();
+//            std::cout << "{" << getHours(root) << ":" << getMinutes(root) << "}" << "(" << sColor << ")" << std::endl;
+//            root->val.printInLine();
+            std::cout << "{"  << print_getter(root->val.head->val) << "}" << "(" << sColor << ")" << std::endl;
             printBase(root->left, indent, false);
             printBase(root->right, indent, true);
         }    
@@ -550,7 +584,22 @@ public:
         return searchTreeBase(this->root, k);
     }
 
+    int countSearchComparisons(std::string k) {
+        return countSearchComparisonsBase(this->root, k);
+    }
+    
     void insert(Client _val) {
+        if (this->root == TNULL) {
+            NodeClientTree* node = new NodeClientTree;
+            node->val.push(_val);
+            node->parent = nullptr;
+            node->left = TNULL;
+            node->right = TNULL;
+            node->color = 0;
+            this->root = node;
+            return;
+        }
+
         NodeClientTree* y = nullptr;
         NodeClientTree* x = this->root;
 
@@ -569,22 +618,16 @@ public:
         NodeClientTree* node = new NodeClientTree;
 
         node->parent = y;
-        if (y == nullptr) {
-            root = node;
-        } else if (full_comparator(_val, y->val.head->val) > 0) {
+        if (full_comparator(_val, y->val.head->val) > 0) {
             y->left = node;
         } else {
             y->right = node;
         }
 
-        if (node->parent == nullptr) {
-            node->color = 0;
-            return;
-        }
-
-        if (node->parent->parent == nullptr) {
-            return;
-        }
+        node->val.push(_val);
+        node->left = TNULL;
+        node->right = TNULL;
+        node->color = 1;
 
         fixInsert(node);
     }

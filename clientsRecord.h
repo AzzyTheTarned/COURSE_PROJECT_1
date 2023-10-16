@@ -6,7 +6,8 @@ struct Client {
     std::string name;
     std::string birthday;
     std::string phone_number;
-    int ID;
+    std::string ID;
+    int order;
 
     bool operator== (const Client &other) const {
         return

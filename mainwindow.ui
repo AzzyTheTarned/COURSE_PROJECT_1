@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>876</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Бухгалтерия</string>
   </property>
   <widget class="QWidget" name="mainForm">
    <widget class="QGroupBox" name="fileSection">
@@ -30,6 +30,9 @@
      <string>Чтение/запись в файл </string>
     </property>
     <widget class="QLineEdit" name="fileForm">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -37,6 +40,9 @@
        <width>251</width>
        <height>41</height>
       </rect>
+     </property>
+     <property name="placeholderText">
+      <string>Путь к папке</string>
      </property>
     </widget>
     <widget class="QPushButton" name="loadButton">
@@ -83,6 +89,180 @@
     <property name="text">
      <string>Меню отладки</string>
     </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>781</width>
+      <height>711</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="clientsTab">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="title">
+      <string>Клиенты</string>
+     </attribute>
+     <widget class="QTableWidget" name="clientsTable">
+      <property name="geometry">
+       <rect>
+        <x>-5</x>
+        <y>-9</y>
+        <width>791</width>
+        <height>411</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="clientsRemove">
+      <property name="geometry">
+       <rect>
+        <x>390</x>
+        <y>580</y>
+        <width>391</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>36</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>-</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="clientsAdd">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>580</y>
+        <width>391</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>36</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>+</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="groupBox">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>400</y>
+        <width>771</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Поиск по полям</string>
+      </property>
+      <widget class="QPushButton" name="clientsNameSearch">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>321</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По имени</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="clientsBirthdaySearch">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>20</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По дате рождения</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="clientsNumSearch">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По номеру</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="clientsIDSearch">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По паспорту</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="clientsSearchField">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>751</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Введите искомое поле</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="clientsSearchResult">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>80</y>
+         <width>771</width>
+         <height>71</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="agentsTab">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="title">
+      <string>Агенты</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="insurancesTab">
+     <property name="font">
+      <font>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <attribute name="title">
+      <string>Страховки</string>
+     </attribute>
+    </widget>
    </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
