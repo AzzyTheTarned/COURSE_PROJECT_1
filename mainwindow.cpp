@@ -86,6 +86,10 @@ void MainWindow::on_saveButton_clicked()
 
 void MainWindow::on_clientsNameSearch_clicked()
 {
+    if (clientsDirectory.clientsList.size() == 0) {
+        ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+        return;
+    }
     if (ui->clientsSearchField->text() == "") {
         ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
         return;
@@ -134,6 +138,10 @@ void MainWindow::on_clientsNameSearch_clicked()
 
 void MainWindow::on_clientsBirthdaySearch_clicked()
 {
+    if (clientsDirectory.clientsList.size() == 0) {
+        ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+        return;
+    }
     if (ui->clientsSearchField->text() == "") {
         ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
         return;
@@ -182,6 +190,10 @@ void MainWindow::on_clientsBirthdaySearch_clicked()
 
 void MainWindow::on_clientsNumSearch_clicked()
 {
+    if (clientsDirectory.clientsList.size() == 0) {
+        ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+        return;
+    }
     if (ui->clientsSearchField->text() == "") {
         ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
         return;
@@ -230,6 +242,10 @@ void MainWindow::on_clientsNumSearch_clicked()
 
 void MainWindow::on_clientsIDSearch_clicked()
 {
+    if (clientsDirectory.clientsList.size() == 0) {
+        ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+        return;
+    }
     if (ui->clientsSearchField->text() == "") {
         ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
         return;
