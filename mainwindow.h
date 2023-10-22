@@ -34,6 +34,8 @@ private slots:
 
     void on_clientsRemove_clicked();
 
+    void on_startButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

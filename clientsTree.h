@@ -89,6 +89,7 @@ public:
         p->next = p->next->next;
         delete toDel;
     }
+
     NodeClientList* push(Client _val) {
         if (isEmpty()) {
             return pushFirst(_val);
@@ -100,11 +101,22 @@ public:
             return nullptr;
         }
         NodeClientList* p = head;
-        while (p->next != nullptr && p->next->val <= _val) p = p->next;
-        if (p->val == _val) return nullptr;
+        NodeClientList* prev = nullptr;
+        while (p != nullptr && p->val < _val) {
+            prev = p;
+            p = p->next;
+        }
+        if (p != nullptr && p->val == _val) {
+            return nullptr;
+        }
         NodeClientList* toAdd = new NodeClientList(_val);
-        toAdd->next = p->next;
-        p->next = toAdd;
+        if (prev != nullptr) {
+            prev->next = toAdd;
+        }
+        toAdd->next = p;
+        if (p == head) {
+            head = toAdd;
+        }
         return toAdd;
     }
     NodeClientList* find(Client _val) {

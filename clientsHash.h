@@ -206,6 +206,22 @@ public:
             table[i] = nullptr;
         }
     }
+    void reconstruct(unsigned int _capacity) {
+        for (int i = 0; i < capacity; ++i) {
+            if (table[i]) {
+                delete table[i];
+            }
+        }
+        delete[] table;
+        capacity = _capacity;
+        start_capacity = _capacity;
+        size = 0;
+        size_with_deleted = 0;
+        table = new NodeClientHashTable*[_capacity];
+        for (int i = 0; i < _capacity; ++i) {
+            table[i] = nullptr;
+        }
+    }
 };
 
 #endif // CLIENTSHASH_H

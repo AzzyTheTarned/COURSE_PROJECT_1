@@ -23,6 +23,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->clientsAddPhoneEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9+]{0,255}"), this));
     ui->clientsAddIDEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,255}"), this));
     ui->clientsRemoveEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,255}"), this));
+    ui->tabWidget->setDisabled(true);
+    ui->fileSection->setDisabled(true);
+    ui->clientsSizeEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}"), this));
+    ui->agentsSizeEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}"), this));
+    ui->insurancesSizeEdit->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]{0,5}"), this));
 }
 
 MainWindow::~MainWindow()
@@ -417,5 +422,37 @@ void MainWindow::on_clientsRemove_clicked()
         ui->clientsTable->setItem(i, j, id);
     }
     ui->statusbar->showMessage(QString("Запись удалена"), 3000);
+}
+
+
+void MainWindow::on_startButton_clicked()
+{
+    if (ui->clientsSizeEdit->text() != "") {
+        if (stoi(ui->clientsSizeEdit->text().toStdString()) == 0) {
+            ui->statusbar->showMessage(QString("Размер не может быть нулевым"), 2000);
+            return;
+        }
+    }
+    if (ui->agentsSizeEdit->text() != "") {
+        if (stoi(ui->agentsSizeEdit->text().toStdString()) == 0) {
+            ui->statusbar->showMessage(QString("Размер не может быть нулевым"), 2000);
+            return;
+        }
+    }
+    if (ui->insurancesSizeEdit->text() != "") {
+        if (stoi(ui->insurancesSizeEdit->text().toStdString()) == 0) {
+            ui->statusbar->showMessage(QString("Размер не может быть нулевым"), 2000);
+            return;
+        }
+    }
+
+    if (ui->clientsSizeEdit->text() != "") {
+        clientsDirectory.clientsHashTable.reconstruct(stoi(ui->clientsSizeEdit->text().toStdString()));
+    }
+
+    ui->defaultSizeSection->setDisabled(true);
+    ui->tabWidget->setDisabled(false);
+    ui->fileSection->setDisabled(false);
+    ui->statusbar->showMessage(QString("Справочники инициализированы"), 2000);
 }
 
