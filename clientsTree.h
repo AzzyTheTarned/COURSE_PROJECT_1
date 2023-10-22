@@ -470,7 +470,15 @@ private:
             std::string sColor = root->color?"RED":"BLACK";
 //            std::cout << "{" << getHours(root) << ":" << getMinutes(root) << "}" << "(" << sColor << ")" << std::endl;
 //            root->val.printInLine();
-            std::cout << "{"  << print_getter(root->val.head->val) << "}" << "(" << sColor << ")" << std::endl;
+            std::cout << "{"  << print_getter(root->val.head->val) << "}";
+            NodeClientList* p = root->val.head;
+            std::cout << "[ ";
+            while (p) {
+                std::cout << p->val.ID << " ";
+                p = p->next;
+            }
+            std::cout << "]";
+            std::cout << "(" << sColor << ")" << std::endl;
             printBase(root->left, indent, false);
             printBase(root->right, indent, true);
         }    
