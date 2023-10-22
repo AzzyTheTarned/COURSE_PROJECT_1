@@ -9,6 +9,8 @@ class ClientHashTable {
         Client record;
         bool status; // true - элемент есть (статус 1), false - элемент был удален (статус 2)
         // если вместо Node nullptr - значит элемента никогда не было (статус 0)
+        int primary_hash;
+        int secondary_hash;
         NodeClientHashTable(const Client& _record) : record(_record), status(true) {}
     };
     NodeClientHashTable** table;
@@ -21,9 +23,14 @@ class ClientHashTable {
     //     return key % capacity;
     // }
     int primaryHash(std::string key) {
-        int hash = 0;
+        int pre_hash = 0;
         for (int i = 0; i < key.length(); ++i) {
-            hash += key[i];
+            pre_hash += key[i];
+        }
+        int hash = 0;
+        while (pre_hash > 0) {
+            hash += pre_hash % 1000;
+            pre_hash /= 1000;
         }
         return hash % capacity;
     }
@@ -31,9 +38,14 @@ class ClientHashTable {
     //     return _record.ID % capacity;
     // }
     int primaryHash(const Client& _record) {
-        int hash = 0;
+        int pre_hash = 0;
         for (int i = 0; i < _record.ID.length(); ++i) {
-            hash += _record.ID[i];
+            pre_hash += _record.ID[i];
+        }
+        int hash = 0;
+        while (pre_hash > 0) {
+            hash += pre_hash % 1000;
+            pre_hash /= 1000;
         }
         return hash % capacity;
     }
@@ -175,6 +187,12 @@ public:
             return_index = index;
         }
         ++size;
+        table[return_index]->primary_hash = primaryHash(_record);
+        if (return_index >= table[return_index]->primary_hash) {
+            table[return_index]->secondary_hash = return_index;
+        } else {
+            table[return_index]->secondary_hash = capacity + return_index;
+        }
         return return_index;
     }
     void Print() {
@@ -185,7 +203,8 @@ public:
             else if (table[i]->status) {
                 std::cout << i << ": " << " [STATUS 1] " << table[i]->record.name << " - Birthday: "
                           << table[i]->record.birthday << " - Phone number: "
-                          << table[i]->record.phone_number << " - ID: " << table[i]->record.ID << std::endl;
+                          << table[i]->record.phone_number << " - ID: " << table[i]->record.ID << " — Primary hash: " <<
+                          table[i]->primary_hash << " — Secondary hash: " << table[i]->secondary_hash << std::endl;
             }
             else std::cout << i << ": " << " [STATUS 2]" << std::endl;
         }
