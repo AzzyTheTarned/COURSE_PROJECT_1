@@ -231,6 +231,28 @@ struct tree
     }
 
 
+    void clear() {
+        clear(root);
+    }
+
+    void clear(node*& croot)
+    {
+        if (croot!= nullptr and croot->data.get(1)!=nullptr) {
+            int j = 0;
+            while (croot->data.get(j) != nullptr) {
+                key* temp = croot->data.get(j);
+                croot->data.del(temp->agentpass, temp->clientpass, temp->strah, temp->stoim);
+                j++;
+            }
+        }
+        if (croot != nullptr)
+        {
+            clear(croot->left);
+            clear(croot->right);
+            delete croot;
+            croot = nullptr;
+        }
+    }
 
 };
 #endif // BDP_H

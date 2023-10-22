@@ -358,7 +358,7 @@ private:
         }
 
         if (z == TNULL) {
-            std::cout << "Couldn't find key in the tree" << std::endl;
+//            std::cout << "Couldn't find key in the tree" << std::endl;
             return -1;
         }
 
@@ -632,32 +632,32 @@ public:
         fixInsert(node);
     }
 
-    int remove(Client _val) {
-        if (getAddress(full_comparator) == getAddress(compareClientName)) {
-            NodeClientTree* node = searchTree(_val.name);
-            if (node == TNULL) return -1;
-            node->val.remove(_val);
-            if (node->val.head == nullptr) {
-                deleteNodeBase(this->root, _val.name);
-            }
-            return 0;
-        } else if (getAddress(full_comparator) == getAddress(compareClientBirthday)) {
-            NodeClientTree* node = searchTree(_val.birthday);
-            if (node == TNULL) return -1;
-            node->val.remove(_val);
-            if (node->val.head == nullptr) {
-                deleteNodeBase(this->root, _val.birthday);
-            }
-            return 0;
-        } else if (getAddress(full_comparator) == getAddress(compareClientPhone)) {
-            NodeClientTree* node = searchTree(_val.phone_number);
-            if (node == TNULL) return -1;
-            node->val.remove(_val);
-            if (node->val.head == nullptr) {
-                deleteNodeBase(this->root, _val.phone_number);
-            }
-            return 0;
-        }
+//    int remove(Client _val) {
+//        if (getAddress(full_comparator) == getAddress(compareClientName)) {
+//            NodeClientTree* node = searchTree(_val.name);
+//            if (node == TNULL) return -1;
+//            node->val.remove(_val);
+//            if (node->val.head == nullptr) {
+//                deleteNodeBase(this->root, _val.name);
+//            }
+//            return 0;
+//        } else if (getAddress(full_comparator) == getAddress(compareClientBirthday)) {
+//            NodeClientTree* node = searchTree(_val.birthday);
+//            if (node == TNULL) return -1;
+//            node->val.remove(_val);
+//            if (node->val.head == nullptr) {
+//                deleteNodeBase(this->root, _val.birthday);
+//            }
+//            return 0;
+//        } else if (getAddress(full_comparator) == getAddress(compareClientPhone)) {
+//            NodeClientTree* node = searchTree(_val.phone_number);
+//            if (node == TNULL) return -1;
+//            node->val.remove(_val);
+//            if (node->val.head == nullptr) {
+//                deleteNodeBase(this->root, _val.phone_number);
+//            }
+//            return 0;
+//        }
         // NodeClientTree* node = searchTree(_val.name);
         // if (node == TNULL) return -1;
         // node->val.remove(_val);
@@ -665,7 +665,61 @@ public:
         //     deleteNodeBase(this->root, _val.name);
         // }
         // return 0;
+//    }
+    int removeFromName(Client _val) {
+        NodeClientTree* node = searchTree(_val.name);
+        if (node == TNULL) return -1;
+        if (node->val.find(_val)) {
+            if (node->val.size() == 1) {
+                deleteNodeBase(this->root, _val.name);
+            } else {
+                node->val.remove(_val);
+            }
+        }
+        return 0;
     }
+    int removeFromBirthday(Client _val) {
+        NodeClientTree* node = searchTree(_val.birthday);
+        if (node == TNULL) return -1;
+        if (node->val.find(_val)) {
+            if (node->val.size() == 1) {
+                deleteNodeBase(this->root, _val.birthday);
+            } else {
+                node->val.remove(_val);
+            }
+        }
+    }
+    int removeFromPhone(Client _val) {
+        NodeClientTree* node = searchTree(_val.phone_number);
+        if (node == TNULL) return -1;
+        if (node->val.find(_val)) {
+            if (node->val.size() == 1) {
+                deleteNodeBase(this->root, _val.phone_number);
+            } else {
+                node->val.remove(_val);
+            }
+        }
+    }
+    // int removeFromBirthday(Client _val) {
+    //     NodeClientTree* node = searchTree(_val.birthday);
+    //     if (node == TNULL) return -1;
+    //     node->val.remove(_val);
+    //     if (node->val.head == nullptr) {
+    //         deleteNodeBase(this->root, _val.birthday);
+    //     }
+    //     return 0;
+    // }
+    // // ^ bugged
+    // int removeFromPhone(Client _val) {
+    //     NodeClientTree* node = searchTree(_val.phone_number);
+    //     if (node == TNULL) return -1;
+    //     node->val.remove(_val);
+    //     if (node->val.head == nullptr) {
+    //         deleteNodeBase(this->root, _val.phone_number);
+    //     }
+    //     return 0;
+    // }
+    // // ^ bugged
 
     void fancyPrint() {
         if (root) {

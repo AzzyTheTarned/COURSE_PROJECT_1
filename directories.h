@@ -18,7 +18,7 @@ struct ClientsDir {
 
     int ADD(Client _val)
     {
-        if (clientsHashTable.Search(_val) != -1) {
+        if (clientsHashTable.Search(_val.ID) != -1) {
             return 1;
         }
 
@@ -30,24 +30,24 @@ struct ClientsDir {
 
 
         clientsHashTable.Insert(clientsList[clientsList.size() - 1]);
-        if (clientsHashTable.Search(_val) == -1) {
-            return -1;
-        }
+//        if (clientsHashTable.Search(_val) == -1) {
+//            return -1;
+//        }
 
         clientsNameTree.insert(clientsList[clientsList.size() - 1]);
-        if (!(clientsNameTree.searchTree(_val.name)->val.find(_val))) {
-            return -2;
-        }
+//        if (!(clientsNameTree.searchTree(_val.name)->val.find(_val))) {
+//            return -2;
+//        }
 
         clientsBirthdayTree.insert(clientsList[clientsList.size() - 1]);
-        if (!(clientsBirthdayTree.searchTree(_val.birthday)->val.find(_val))) {
-            return -3;
-        }
+//        if (!(clientsBirthdayTree.searchTree(_val.birthday)->val.find(_val))) {
+//            return -3;
+//        }
 
         clientsPhoneTree.insert(clientsList[clientsList.size() - 1]);
-        if (!(clientsPhoneTree.searchTree(_val.phone_number)->val.find(_val))) {
-            return -4;
-        }
+//        if (!(clientsPhoneTree.searchTree(_val.phone_number)->val.find(_val))) {
+//            return -4;
+//        }
 
 
 
@@ -70,7 +70,10 @@ struct ClientsDir {
             if (!(iss >> placeholder.name >> placeholder.birthday >> placeholder.phone_number >> placeholder.ID)) {
                 return 2;
             }
-            std::cout << ADD(placeholder) << std::endl;
+//            std::cout <<
+                ADD(placeholder)
+//                < std::endl
+            ;
         }
         SOURCE_FILE.close();
         return 0;
@@ -92,21 +95,30 @@ struct ClientsDir {
         return 0;
     }
 
-//    int REMOVE(Client _val) {
-//        clientsHashTable.Delete(_val.ID);
-//        clientsNameTree.remove(_val);
-//        clientsBirthdayTree.remove(_val);
-//        clientsPhoneTree.remove(_val);
-//        clientsList.remove(_val);
+    int REMOVE(Client _val, int list_index) {
+        clientsHashTable.Delete(_val.ID);
+        clientsNameTree.removeFromName(_val);
+        clientsBirthdayTree.removeFromBirthday(_val);
+        clientsPhoneTree.removeFromPhone(_val);
 
-//        return 0;
-//    }
+        if (list_index != (clientsList.size() - 1)) {
+            clientsHashTable.getTable()[clientsHashTable.Search(clientsList.back().ID)]->record.order = list_index + 1;
+            clientsNameTree.searchTree(clientsList.back().name)->val.find(clientsList.back())->val.order = list_index + 1;
+            clientsBirthdayTree.searchTree(clientsList.back().birthday)->val.find(clientsList.back())->val.order = list_index + 1;
+            clientsNameTree.searchTree(clientsList.back().name)->val.find(clientsList.back())->val.order = list_index + 1;
+            clientsList[list_index] = clientsList.back();
+            clientsList[list_index].order = list_index + 1;
+        }
+        clientsList.pop_back();
+
+        return 0;
+    }
 };
 
 struct InsurancesDir {
     InsurancesDir() {};
     InsurancesDir(int hashTableDefaultCapacity) : insurancesHashTable(hashTableDefaultCapacity) {};
-    listt insurancesList;
+    std::vector<key> insurancesList;
     tree insurancesClientIdTree = tree(price_co);
     tree insurancesAgentIdTree = tree(price_com);
     tree insurancesTypeTree = tree(price_comp);
@@ -120,6 +132,16 @@ struct InsurancesDir {
         insurancesAgentIdTree.insert(_val);
         insurancesTypeTree.insert(_val);
         insurancesCostTree.insert(_val);
+
+        insurancesList.push_back(_val);
+    }
+
+    int LOAD(std::string filename) {
+        insurancesClientIdTree.clear();
+        insurancesAgentIdTree.clear();
+        insurancesCostTree.clear();
+        insurancesTypeTree.clear();
+        insurancesList.clear();
     }
 
 };

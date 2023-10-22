@@ -28,6 +28,12 @@ private slots:
 
     void on_clientsIDSearch_clicked();
 
+    void on_clientsAdd_clicked();
+
+    void on_clientsDebug_clicked();
+
+    void on_clientsRemove_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

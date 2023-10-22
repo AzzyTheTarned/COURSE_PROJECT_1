@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>876</height>
+    <height>863</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,35 +72,17 @@
      </property>
     </widget>
    </widget>
-   <widget class="QPushButton" name="debugMenuButton">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>20</y>
-      <width>321</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Меню отладки</string>
-    </property>
-   </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>90</y>
       <width>781</width>
-      <height>711</height>
+      <height>751</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="clientsTab">
      <property name="enabled">
@@ -119,43 +101,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="clientsRemove">
-      <property name="geometry">
-       <rect>
-        <x>390</x>
-        <y>580</y>
-        <width>391</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>36</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>-</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="clientsAdd">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>580</y>
-        <width>391</width>
-        <height>61</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>36</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>+</string>
-      </property>
-     </widget>
-     <widget class="QGroupBox" name="groupBox">
+     <widget class="QGroupBox" name="clientsSearchGroup">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -243,6 +189,154 @@
        </property>
       </widget>
      </widget>
+     <widget class="QGroupBox" name="clientsAddGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>549</y>
+        <width>771</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Добавление</string>
+      </property>
+      <widget class="QPushButton" name="clientsAdd">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>50</y>
+         <width>771</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="clientsAddNameEdit">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>341</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>ФИО</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="clientsAddBirthdateEdit">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>20</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Дата рождения</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="clientsAddPhoneEdit">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Номер телефона</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="clientsAddIDEdit">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="clientsRemoveGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>630</y>
+        <width>781</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Удаление</string>
+      </property>
+      <widget class="QPushButton" name="clientsRemove">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>631</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>36</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="clientsRemoveEdit">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QPushButton" name="clientsDebug">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>690</y>
+        <width>771</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Отладка</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="agentsTab">
      <property name="enabled">
@@ -251,6 +345,252 @@
      <attribute name="title">
       <string>Агенты</string>
      </attribute>
+     <widget class="QGroupBox" name="agentsAddGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>549</y>
+        <width>771</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Добавление</string>
+      </property>
+      <widget class="QPushButton" name="agentsAdd">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>50</y>
+         <width>771</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>24</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="agentsAddNameEdit">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>341</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>ФИО</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="agentsAddPhoneEdit">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>20</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Номер телефона</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="agentsAddFeeEdit">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Процент</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="agentsAddIdEdit">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="agentsSearchGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>400</y>
+        <width>771</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Поиск по полям</string>
+      </property>
+      <widget class="QPushButton" name="agentsNameSearch">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>321</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По имени</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="agentsNumSearch">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>20</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По номеру</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="agentsFeeSearch">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По проценту</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="agentsIDSearch">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По паспорту</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="agentsSearchField">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>751</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Введите искомое поле</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="agentsSearchResult">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>80</y>
+         <width>771</width>
+         <height>71</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QTableWidget" name="agentsTable">
+      <property name="geometry">
+       <rect>
+        <x>-5</x>
+        <y>-9</y>
+        <width>791</width>
+        <height>411</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="agentsDebug">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>690</y>
+        <width>771</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Отладка</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="agentsRemoveGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>630</y>
+        <width>781</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Удаление</string>
+      </property>
+      <widget class="QPushButton" name="agentsRemove">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>631</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>36</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="agentsRemoveEdit">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
     <widget class="QWidget" name="insurancesTab">
      <property name="font">
@@ -262,6 +602,297 @@
      <attribute name="title">
       <string>Страховки</string>
      </attribute>
+     <widget class="QGroupBox" name="insurancesAddGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>549</y>
+        <width>771</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Добавление</string>
+      </property>
+      <widget class="QPushButton" name="insurancesAdd">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>50</y>
+         <width>771</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>24</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>+</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesAddNameEdit">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>341</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="placeholderText">
+        <string>Название</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesAddClientIdEdit">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>20</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт клиента</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesAddAgentIdEdit">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт агента</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesAddCostEdit">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Стоимость</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="insurancesSearchGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>400</y>
+        <width>771</width>
+        <height>151</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Поиск по полям</string>
+      </property>
+      <widget class="QPushButton" name="insurancesNameSearch">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>321</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По названию</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="insurancesClientIDSearch">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>20</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По паспорту клиента</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="insurancesAgentIDSearch">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По паспорту агента</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="insurancesCostSearch">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>По стоимости</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesSearchField">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>50</y>
+         <width>751</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Введите искомое поле</string>
+       </property>
+      </widget>
+      <widget class="QTableWidget" name="insurancesSearchResult">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>80</y>
+         <width>771</width>
+         <height>71</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QTableWidget" name="insurancesTable">
+      <property name="geometry">
+       <rect>
+        <x>-5</x>
+        <y>-9</y>
+        <width>791</width>
+        <height>411</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="insurancesDebug">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>690</y>
+        <width>771</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Отладка</string>
+      </property>
+     </widget>
+     <widget class="QGroupBox" name="insurancesRemoveGroup">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>630</y>
+        <width>781</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Удаление</string>
+      </property>
+      <widget class="QPushButton" name="insurancesRemove">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>20</y>
+         <width>131</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>36</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>-</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesRemoveCostEdit">
+       <property name="geometry">
+        <rect>
+         <x>630</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Стоимость</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesRemoveAgentIdEdit">
+       <property name="geometry">
+        <rect>
+         <x>490</x>
+         <y>20</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт агента</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesRemoveClientIdEdit">
+       <property name="geometry">
+        <rect>
+         <x>340</x>
+         <y>20</y>
+         <width>151</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Паспорт клиента</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="insurancesRemoveNameEdit">
+       <property name="geometry">
+        <rect>
+         <x>130</x>
+         <y>20</y>
+         <width>211</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Название</string>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
   </widget>
