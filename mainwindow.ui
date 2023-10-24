@@ -968,6 +968,9 @@
        <height>31</height>
       </rect>
      </property>
+     <property name="placeholderText">
+      <string>100</string>
+     </property>
     </widget>
     <widget class="QLineEdit" name="insurancesSizeEdit">
      <property name="geometry">

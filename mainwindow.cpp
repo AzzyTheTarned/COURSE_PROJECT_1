@@ -343,7 +343,7 @@ void MainWindow::on_clientsAdd_clicked()
         ui->clientsTable->setItem(i, j, id);
     }
 
-    ui->statusbar->showMessage(QString("Поле добавлено"), 3000);
+    ui->statusbar->showMessage(QString("Запись добавлена"), 3000);
 }
 
 
