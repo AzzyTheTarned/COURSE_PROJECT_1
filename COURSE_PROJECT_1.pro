@@ -13,6 +13,10 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    agentsHash.h \
+    agentsList.h \
+    agentsRecord.h \
+    agentsTree.h \
     clientsHash.h \
     clientsRecord.h \
     clientsTree.h \

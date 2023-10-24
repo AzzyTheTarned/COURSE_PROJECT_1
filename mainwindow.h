@@ -34,6 +34,36 @@ private slots:
 
     void on_clientsRemove_clicked();
 
+    void on_insurancesDebug_clicked();
+
+    void on_insurancesNameSearch_clicked();
+
+    void on_insurancesClientIDSearch_clicked();
+
+    void on_insurancesAgentIDSearch_clicked();
+
+    void on_insurancesCostSearch_clicked();
+
+    void on_insurancesAdd_clicked();
+
+    void on_insurancesRemove_clicked();
+
+    void on_insurancesUniqueSearch_clicked();
+
+    void on_agentsAdd_clicked();
+
+    void on_agentsRemove_clicked();
+
+    void on_agentsIDSearch_clicked();
+
+    void on_agentsNameSearch_clicked();
+
+    void on_agentsNumSearch_clicked();
+
+    void on_agentsFeeSearch_clicked();
+
+    void on_agentsDebug_clicked();
+
     void on_startButton_clicked();
 
 private:

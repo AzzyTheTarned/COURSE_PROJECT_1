@@ -4,6 +4,7 @@
 
 ClientsDir clientsDirectory(10);
 InsurancesDir insurancesDirectory(100);
+AgentsDir agentsDirectory(100);
 
 bool is_number(const std::string& s)
 {
@@ -38,11 +39,27 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_loadButton_clicked()
 {
-    bool load_fail = 0;
-    std::string clients_file_path = "../" + ui->fileForm->text().toStdString() + "/clients.txt";
-    load_fail = clientsDirectory.LOAD(clients_file_path);
+        bool load_fail = 0;
+        std::string clients_file_path = "../" + ui->fileForm->text().toStdString() + "/clients.txt";
+        load_fail = clientsDirectory.LOAD(clients_file_path);
 
-    if (load_fail) {
+        if (load_fail) {
+            ui->statusbar->showMessage(QString("Такой директории не существует"), 3000);
+            return;
+        }
+        bool load_fail_1 = 0;
+        std::string agents_file_path = "../" + ui->fileForm->text().toStdString() + "/agents.txt";
+        load_fail_1 = agentsDirectory.LOAD(agents_file_path);
+
+        if (load_fail_1) {
+            ui->statusbar->showMessage(QString("Такой директории не существует"), 3000);
+            return;
+        }
+    bool load_fail_2 = 0;
+    std::string ins_file_path = "../" + ui->fileForm->text().toStdString() + "/ins.txt";
+    load_fail_2 = insurancesDirectory.LOAD(ins_file_path);
+
+    if (load_fail_2) {
         ui->statusbar->showMessage(QString("Такой директории не существует"), 3000);
         return;
     }
@@ -72,8 +89,64 @@ void MainWindow::on_loadButton_clicked()
         j++;
         QTableWidgetItem* id = new QTableWidgetItem(QString::fromStdString(clientsDirectory.clientsList[i].ID));
         ui->clientsTable->setItem(i, j, id);
-//        client_ref = client_ref->next;
+        //        client_ref = client_ref->next;
     }
+
+    ui->agentsTable->clear();
+    ui->agentsTable->setColumnCount(4);
+    ui->agentsTable->setRowCount(agentsDirectory.agents.size());
+    ui->agentsTable->setHorizontalHeaderLabels(QStringList() << "ФИО" << "Номер телефона" << "Процент" << "Паспорт");
+    ui->agentsTable->setColumnWidth(0, 320);
+    ui->agentsTable->setColumnWidth(1, 150);
+    ui->agentsTable->setColumnWidth(2, 150);
+    ui->agentsTable->setColumnWidth(3, 130);
+
+    for (int i = 0; i < agentsDirectory.agents.size(); i++)
+    {
+        int j = 0;
+        QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].fio));
+        ui->agentsTable->setItem(i, j, fio);
+        j++;
+        QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].number));
+        ui->agentsTable->setItem(i, j, number);
+        j++;
+        QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[i].percent));
+        ui->agentsTable->setItem(i, j, percent);
+        j++;
+        QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].pass));
+        ui->agentsTable->setItem(i, j, pass);
+    }
+
+
+
+
+    ui->insurancesTable->clear();
+    ui->insurancesTable->setColumnCount(4);
+    ui->insurancesTable->setRowCount(insurancesDirectory.insurancesList.size());
+    ui->insurancesTable->setHorizontalHeaderLabels(QStringList() << "Название" << "пасспорт клиента" << "пасспорт агента" << "стоимость");
+    ui->insurancesTable->setColumnWidth(0, 320);
+    ui->insurancesTable->setColumnWidth(1, 150);
+    ui->insurancesTable->setColumnWidth(2, 150);
+    ui->insurancesTable->setColumnWidth(3, 130);
+
+    for (int i = 0; i < insurancesDirectory.insurancesList.size(); i++) {
+        int j = 0;
+        QTableWidgetItem* strah = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].strah));
+        ui->insurancesTable->setItem(i, j, strah);
+        j++;
+        QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].clientpass));
+        ui->insurancesTable->setItem(i, j, client);
+        j++;
+        QTableWidgetItem* agent= new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].agentpass));
+        ui->insurancesTable->setItem(i, j, agent);
+        j++;
+        QTableWidgetItem* stoim = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].stoim));
+        ui->insurancesTable->setItem(i, j, stoim);
+        //        client_ref = client_ref->next;
+    }
+
+
+
 
     ui->statusbar->showMessage(QString("Справочники загружены"), 3000);
 }
@@ -392,6 +465,18 @@ void MainWindow::on_clientsRemove_clicked()
     /*
      * Место для проверки на целостность в справочнике Страховок
      */
+    key temp;
+    node* cur;
+    temp.clientpass = ui->clientsRemoveEdit->text().toStdString();
+//    if (insurancesDirectory.insurancesClientIdTree.find(temp, insurancesDirectory.insurancesClientIdTree.root, cur) != nullptr) {
+//        ui->statusbar->showMessage(QString("Удаление невозможно. Клиент использован в страховке."), 3000);
+//        return;
+//    }
+    node* check_result = insurancesDirectory.insurancesClientIdTree.find(temp, insurancesDirectory.insurancesClientIdTree.root, cur);
+    if (check_result != nullptr) {
+        ui->statusbar->showMessage(QString("Удаление невозможно. Клиент использован в страховке."), 3000);
+        return;
+    }
 
     int record_index_to_del = clientsDirectory.clientsHashTable.getTable()[del_status]->record.order - 1;
     Client record_to_del = clientsDirectory.clientsHashTable.getTable()[del_status]->record;
@@ -456,3 +541,817 @@ void MainWindow::on_startButton_clicked()
     ui->statusbar->showMessage(QString("Справочники инициализированы"), 2000);
 }
 
+void MainWindow::on_insurancesDebug_clicked()
+{
+
+        for (int i = 0; i < insurancesDirectory.insurancesList.size(); i++) {
+            std::cout << insurancesDirectory.insurancesList[i].agentpass << " - Birthday: " << insurancesDirectory.insurancesList[i].stoim << " - Phone number: "
+                      << insurancesDirectory.insurancesList[i].clientpass << " - ID: " << insurancesDirectory.insurancesList[i].id << std::endl;
+        }
+        std::cout << std::endl;
+        insurancesDirectory.insurancesAgentIdTree.print();
+        std::cout << std::endl;
+        insurancesDirectory.insurancesClientIdTree.print();
+        std::cout << std::endl;
+        insurancesDirectory.insurancesTypeTree.print();
+        std::cout << std::endl;
+        insurancesDirectory.insurancesCostTree.print();
+        std::cout << std::endl;
+        insurancesDirectory.insurancesHashTable.print();
+        std::cout<<std::endl;
+        ui->statusbar->showMessage(QString("Отладочные данные выведены в консоль"), 3000);
+
+}
+
+
+void MainWindow::on_insurancesNameSearch_clicked()
+{
+        if (insurancesDirectory.insurancesList.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+        }
+        if (ui->insurancesSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
+            return;
+        }
+        std::string field_to_find = ui->insurancesSearchField->text().toStdString();
+        key temp;
+        temp.strah = field_to_find;
+        node* cur;
+        node* nodes = insurancesDirectory.insurancesTypeTree.find(temp,insurancesDirectory.insurancesTypeTree.root,cur);
+        if (nodes == nullptr) {
+            ui->statusbar->showMessage(QString("Поле не найдено"), 2000);
+            return;
+        }
+        ui->insurancesSearchResult->clear();
+        ui->insurancesSearchResult->setColumnCount(5);
+        ui->insurancesSearchResult->setRowCount(nodes->data.size());
+        ui->insurancesSearchResult->setHorizontalHeaderLabels(QStringList() << "стоимость" << "Страхование" << "Агенты" << "Клиенты" << "В массиве");
+        ui->insurancesSearchResult->setColumnWidth(0, 70);
+        ui->insurancesSearchResult->setColumnWidth(1, 250);
+        ui->insurancesSearchResult->setColumnWidth(2, 150);
+        ui->insurancesSearchResult->setColumnWidth(3, 150);
+        ui->insurancesSearchResult->setColumnWidth(4, 130);
+
+        nodes->data.get(0);
+        int i = 0;
+        while (nodes->data.get(i) != nullptr) {
+            int j = 0;
+            QTableWidgetItem* cost = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->stoim));
+            ui->insurancesSearchResult->setItem(i, j, cost);
+            j++;
+            QTableWidgetItem* type = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->strah));
+            ui->insurancesSearchResult->setItem(i, j, type);
+            j++;
+            QTableWidgetItem* agent = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->agentpass));
+            ui->insurancesSearchResult->setItem(i, j, agent);
+            j++;
+            QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->clientpass));
+            ui->insurancesSearchResult->setItem(i, j, client);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(nodes->data.get(i)->id));
+            ui->insurancesSearchResult->setItem(i, j, id);
+            i++;
+        }
+
+        int comparisons_done = insurancesDirectory.insurancesTypeTree.find_k(temp,insurancesDirectory.insurancesTypeTree.root);
+        ui->statusbar->showMessage(QString("Найдено " + QString::number(i) + " записей. Выполнено " + QString::number(comparisons_done) + " сравнений."));
+}
+
+
+void MainWindow::on_insurancesClientIDSearch_clicked()
+{
+        if (insurancesDirectory.insurancesList.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+        }
+        if (ui->insurancesSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
+            return;
+        }
+        std::string field_to_find = ui->insurancesSearchField->text().toStdString();
+        key temp;
+        node* cur;
+        temp.clientpass = field_to_find;
+        node* nodes = insurancesDirectory.insurancesClientIdTree.find(temp,insurancesDirectory.insurancesClientIdTree.root,cur);
+        if (nodes == nullptr) {
+            ui->statusbar->showMessage(QString("Поле не найдено"), 2000);
+            return;
+        }
+        ui->insurancesSearchResult->clear();
+        ui->insurancesSearchResult->setColumnCount(5);
+        ui->insurancesSearchResult->setRowCount(nodes->data.size());
+        ui->insurancesSearchResult->setHorizontalHeaderLabels(QStringList() << "стоимость" << "Страхование" << "Агенты" << "Клиенты" << "В массиве");
+        ui->insurancesSearchResult->setColumnWidth(0, 70);
+        ui->insurancesSearchResult->setColumnWidth(1, 250);
+        ui->insurancesSearchResult->setColumnWidth(2, 150);
+        ui->insurancesSearchResult->setColumnWidth(3, 150);
+        ui->insurancesSearchResult->setColumnWidth(4, 130);
+
+        nodes->data.get(0);
+        int i = 0;
+        while (nodes->data.get(i) != nullptr) {
+            int j = 0;
+            QTableWidgetItem* cost = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->stoim));
+            ui->insurancesSearchResult->setItem(i, j, cost);
+            j++;
+            QTableWidgetItem* type = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->strah));
+            ui->insurancesSearchResult->setItem(i, j, type);
+            j++;
+            QTableWidgetItem* agent = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->agentpass));
+            ui->insurancesSearchResult->setItem(i, j, agent);
+            j++;
+            QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->clientpass));
+            ui->insurancesSearchResult->setItem(i, j, client);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(nodes->data.get(i)->id));
+            ui->insurancesSearchResult->setItem(i, j, id);
+            i++;
+        }
+
+        int comparisons_done = insurancesDirectory.insurancesClientIdTree.find_k(temp,insurancesDirectory.insurancesClientIdTree.root);
+        ui->statusbar->showMessage(QString("Найдено " + QString::number(i) + " записей. Выполнено " + QString::number(comparisons_done) + " сравнений."));
+}
+
+
+void MainWindow::on_insurancesAgentIDSearch_clicked()
+{
+        if (insurancesDirectory.insurancesList.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+        }
+        if (ui->insurancesSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
+            return;
+        }
+        std::string field_to_find = ui->insurancesSearchField->text().toStdString();
+        key temp;
+        temp.agentpass = field_to_find;
+        node* cur;
+        node* nodes = insurancesDirectory.insurancesAgentIdTree.find(temp,insurancesDirectory.insurancesAgentIdTree.root,cur);
+        if (nodes == nullptr) {
+            ui->statusbar->showMessage(QString("Поле не найдено"), 2000);
+            return;
+        }
+        ui->insurancesSearchResult->clear();
+        ui->insurancesSearchResult->setColumnCount(5);
+        ui->insurancesSearchResult->setRowCount(nodes->data.size());
+        ui->insurancesSearchResult->setHorizontalHeaderLabels(QStringList() << "стоимость" << "Страхование" << "Агенты" << "Клиенты" << "В массиве");
+        ui->insurancesSearchResult->setColumnWidth(0, 70);
+        ui->insurancesSearchResult->setColumnWidth(1, 250);
+        ui->insurancesSearchResult->setColumnWidth(2, 150);
+        ui->insurancesSearchResult->setColumnWidth(3, 150);
+        ui->insurancesSearchResult->setColumnWidth(4, 130);
+
+
+        int i = 0;
+        while (nodes->data.get(i) != nullptr) {
+            int j = 0;
+            QTableWidgetItem* cost = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->stoim));
+            ui->insurancesSearchResult->setItem(i, j, cost);
+            j++;
+            QTableWidgetItem* type = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->strah));
+            ui->insurancesSearchResult->setItem(i, j, type);
+            j++;
+            QTableWidgetItem* agent = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->agentpass));
+            ui->insurancesSearchResult->setItem(i, j, agent);
+            j++;
+            QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->clientpass));
+            ui->insurancesSearchResult->setItem(i, j, client);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(nodes->data.get(i)->id));
+            ui->insurancesSearchResult->setItem(i, j, id);
+            i++;
+        }
+
+        int comparisons_done = insurancesDirectory.insurancesAgentIdTree.find_k(temp,insurancesDirectory.insurancesAgentIdTree.root);
+        ui->statusbar->showMessage(QString("Найдено " + QString::number(i) + " записей. Выполнено " + QString::number(comparisons_done) + " сравнений."));
+}
+
+
+void MainWindow::on_insurancesCostSearch_clicked()
+{
+        if (insurancesDirectory.insurancesList.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+        }
+        if (ui->insurancesSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Поле для поиска не задано"), 1000);
+            return;
+        }
+        std::string field_to_find = ui->insurancesSearchField->text().toStdString();
+        key temp;
+        temp.stoim = field_to_find;
+        node* cur;
+        node* nodes = insurancesDirectory.insurancesCostTree.find(temp,insurancesDirectory.insurancesCostTree.root,cur);
+        if (nodes == nullptr) {
+            ui->statusbar->showMessage(QString("Поле не найдено"), 2000);
+            return;
+        }
+        ui->insurancesSearchResult->clear();
+        ui->insurancesSearchResult->setColumnCount(5);
+        ui->insurancesSearchResult->setRowCount(nodes->data.size());
+        ui->insurancesSearchResult->setHorizontalHeaderLabels(QStringList() << "стоимость" << "Страхование" << "Агенты" << "Клиенты" << "В массиве");
+        ui->insurancesSearchResult->setColumnWidth(0, 70);
+        ui->insurancesSearchResult->setColumnWidth(1, 250);
+        ui->insurancesSearchResult->setColumnWidth(2, 150);
+        ui->insurancesSearchResult->setColumnWidth(3, 150);
+        ui->insurancesSearchResult->setColumnWidth(4, 130);
+
+        nodes->data.get(0);
+        int i = 0;
+        while (nodes->data.get(i) != nullptr) {
+            int j = 0;
+            QTableWidgetItem* cost = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->stoim));
+            ui->insurancesSearchResult->setItem(i, j, cost);
+            j++;
+            QTableWidgetItem* type = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->strah));
+            ui->insurancesSearchResult->setItem(i, j, type);
+            j++;
+            QTableWidgetItem* agent = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->agentpass));
+            ui->insurancesSearchResult->setItem(i, j, agent);
+            j++;
+            QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(nodes->data.get(i)->clientpass));
+            ui->insurancesSearchResult->setItem(i, j, client);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(nodes->data.get(i)->id));
+            ui->insurancesSearchResult->setItem(i, j, id);
+            i++;
+        }
+
+        int comparisons_done = insurancesDirectory.insurancesCostTree.find_k(temp,insurancesDirectory.insurancesCostTree.root);
+        ui->statusbar->showMessage(QString("Найдено " + QString::number(i) + " записей. Выполнено " + QString::number(comparisons_done) + " сравнений."));
+}
+
+
+void MainWindow::on_insurancesAdd_clicked()
+{
+        if (ui->insurancesAddNameEdit->text() == "" || ui->insurancesAddAgentIdEdit->text() == "" || ui->insurancesAddClientIdEdit->text() == "" || ui->insurancesAddCostEdit->text() == "") {
+            ui->statusbar->showMessage(QString("Поля не заполнены полностью"), 1000);
+            return;
+        }
+        if (!is_number(ui->insurancesAddAgentIdEdit->text().toStdString())) {
+            ui->statusbar->showMessage(QString("Паспорт агента задан некорректно"), 1000);
+            return;
+        }
+        if (!is_number(ui->insurancesAddClientIdEdit->text().toStdString())) {
+            ui->statusbar->showMessage(QString("Паспорт клиента задан некорректно"), 1000);
+            return;
+        }
+        if (!is_number(ui->insurancesAddCostEdit->text().toStdString())) {
+            ui->statusbar->showMessage(QString("Стоимость задана некорректно"), 1000);
+            return;
+        }
+        key record_to_add;
+        record_to_add.strah=ui->insurancesAddNameEdit->text().toStdString(), record_to_add.agentpass =ui->insurancesAddAgentIdEdit->text().toStdString(), record_to_add.clientpass =ui->insurancesAddClientIdEdit->text().toStdString(), record_to_add.stoim = ui->insurancesAddCostEdit->text().toStdString();
+
+        if (clientsDirectory.clientsHashTable.Search(record_to_add.clientpass) == -1 || agentsDirectory.agentsHashTable.find(record_to_add.agentpass) == nullptr) {
+            ui->statusbar->showMessage(QString("Такого клиента или агента не существует"), 1000);
+            return;
+        }
+
+
+        insurancesDirectory.ADD(record_to_add);
+
+        ui->insurancesTable->clear();
+        ui->insurancesTable->setColumnCount(4);
+        ui->insurancesTable->setRowCount(insurancesDirectory.insurancesList.size());
+        ui->insurancesTable->setHorizontalHeaderLabels(QStringList() << "Название" << "Агенты" << "Клиенты" << "Стоимость");
+        ui->insurancesTable->setColumnWidth(0, 320);
+        ui->insurancesTable->setColumnWidth(1, 150);
+        ui->insurancesTable->setColumnWidth(2, 150);
+        ui->insurancesTable->setColumnWidth(3, 130);
+
+        for (int i = 0; i < insurancesDirectory.insurancesList.size(); i++) {
+            int j = 0;
+            QTableWidgetItem* name = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].strah));
+            ui->insurancesTable->setItem(i, j, name);
+            j++;
+            QTableWidgetItem* agent = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].agentpass));
+            ui->insurancesTable->setItem(i, j, agent);
+            j++;
+            QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].clientpass));
+            ui->insurancesTable->setItem(i, j, client);
+            j++;
+            QTableWidgetItem* stoim = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].stoim));
+            ui->insurancesTable->setItem(i, j, stoim);
+        }
+
+        ui->statusbar->showMessage(QString("Поле добавлено"), 3000);
+}
+
+
+void MainWindow::on_insurancesRemove_clicked()
+{
+        if (insurancesDirectory.insurancesList.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+        }
+        if (ui->insurancesRemoveNameEdit->text() == "") {
+            ui->statusbar->showMessage(QString("введите название"), 1000);
+            return;
+        }
+        if (ui->insurancesRemoveAgentIdEdit->text() == "") {
+            ui->statusbar->showMessage(QString("введите паспорт агента"), 1000);
+            return;
+        }
+        if (!is_number(ui->insurancesRemoveAgentIdEdit->text().toStdString())) {
+            ui->statusbar->showMessage(QString("некорректный паспорт агента"), 1000);
+            return;
+        }
+        if (ui->insurancesRemoveClientIdEdit->text() == "") {
+            ui->statusbar->showMessage(QString("введите паспорт клиента"), 1000);
+            return;
+        }
+        if (!is_number(ui->insurancesRemoveClientIdEdit->text().toStdString())) {
+            ui->statusbar->showMessage(QString("Название паспорта некорректно"), 1000);
+            return;
+        }
+        Ins temp;
+        temp.val.agentpass = ui->insurancesRemoveAgentIdEdit->text().toStdString(),temp.val.clientpass=ui->insurancesRemoveClientIdEdit->text().toStdString(),temp.val.strah=ui->insurancesRemoveNameEdit->text().toStdString();
+
+        key del_status = insurancesDirectory.insurancesHashTable.find(temp.val.agentpass, temp.val.clientpass, temp.val.strah);
+        if (del_status.id == -1) {
+            ui->statusbar->showMessage(QString("Записи с такими полями нет в справочнике"), 1000);
+            return;
+        }
+
+        /*
+         * Место для проверки на целостность в справочнике Страховок
+         */
+
+
+
+        insurancesDirectory.REMOVE(del_status);
+
+        ui->insurancesTable->clear();
+        ui->insurancesTable->setColumnCount(4);
+        ui->insurancesTable->setRowCount(insurancesDirectory.insurancesList.size());
+        ui->insurancesTable->setHorizontalHeaderLabels(QStringList() << "Название" << "Клиенты" << "Агенты" << "Стоимость");
+        ui->insurancesTable->setColumnWidth(0, 320);
+        ui->insurancesTable->setColumnWidth(1, 150);
+        ui->insurancesTable->setColumnWidth(2, 150);
+        ui->insurancesTable->setColumnWidth(3, 130);
+
+        for (int i = 0; i < insurancesDirectory.insurancesList.size(); i++) {
+            int j = 0;
+            QTableWidgetItem* name = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].strah));
+            ui->insurancesTable->setItem(i, j, name);
+            j++;
+            QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].clientpass));
+            ui->insurancesTable->setItem(i, j, client);
+            j++;
+            QTableWidgetItem* agent = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].agentpass));
+            ui->insurancesTable->setItem(i, j, agent);
+            j++;
+            QTableWidgetItem* stoim = new QTableWidgetItem(QString::fromStdString(insurancesDirectory.insurancesList[i].stoim));
+            ui->insurancesTable->setItem(i, j, stoim);
+        }
+        ui->statusbar->showMessage(QString("Запись удалена"), 3000);
+}
+
+
+void MainWindow::on_insurancesUniqueSearch_clicked()
+{
+        if (insurancesDirectory.insurancesList.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+        }
+        if (ui->insurancesRemoveNameEdit->text() == "") {
+            ui->statusbar->showMessage(QString("введите название"), 1000);
+            return;
+        }
+        if (ui->insurancesRemoveAgentIdEdit->text() == "") {
+            ui->statusbar->showMessage(QString("введите паспорт агента"), 1000);
+            return;
+        }
+        if (!is_number(ui->insurancesRemoveAgentIdEdit->text().toStdString())) {
+            ui->statusbar->showMessage(QString("некорректный паспорт агента"), 1000);
+            return;
+        }
+        if (ui->insurancesRemoveClientIdEdit->text() == "") {
+            ui->statusbar->showMessage(QString("введите паспорт клиента"), 1000);
+            return;
+        }
+        if (!is_number(ui->insurancesRemoveClientIdEdit->text().toStdString())) {
+            ui->statusbar->showMessage(QString("Название паспорта некорректно"), 1000);
+            return;
+        }
+        Ins temp;
+        temp.val.agentpass = ui->insurancesRemoveAgentIdEdit->text().toStdString(),temp.val.clientpass=ui->insurancesRemoveClientIdEdit->text().toStdString(),temp.val.strah=ui->insurancesRemoveNameEdit->text().toStdString();
+
+        key del_status = insurancesDirectory.insurancesHashTable.find(temp.val.agentpass, temp.val.clientpass, temp.val.strah);
+        if (del_status.id == -1) {
+            ui->statusbar->showMessage(QString("Записи с такими полями нет в справочнике"), 1000);
+            return;
+        }
+        ui->insurancesSearchResult->clear();
+        ui->insurancesSearchResult->setColumnCount(5);
+        ui->insurancesSearchResult->setRowCount(1);
+        ui->insurancesSearchResult->setHorizontalHeaderLabels(QStringList() << "стоимость" << "Страхование" << "Агенты" << "Клиенты" << "В массиве");
+        ui->insurancesSearchResult->setColumnWidth(0, 70);
+        ui->insurancesSearchResult->setColumnWidth(1, 250);
+        ui->insurancesSearchResult->setColumnWidth(2, 150);
+        ui->insurancesSearchResult->setColumnWidth(3, 150);
+        ui->insurancesSearchResult->setColumnWidth(4, 130);
+        int i = 0;
+
+            int j = 0;
+        QTableWidgetItem* cost = new QTableWidgetItem(QString::fromStdString(del_status.stoim));
+            ui->insurancesSearchResult->setItem(i, j, cost);
+            j++;
+            QTableWidgetItem* type = new QTableWidgetItem(QString::fromStdString(del_status.strah));
+            ui->insurancesSearchResult->setItem(i, j, type);
+            j++;
+            QTableWidgetItem* agent = new QTableWidgetItem(QString::fromStdString(del_status.agentpass));
+            ui->insurancesSearchResult->setItem(i, j, agent);
+            j++;
+            QTableWidgetItem* client = new QTableWidgetItem(QString::fromStdString(del_status.clientpass));
+            ui->insurancesSearchResult->setItem(i, j, client);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(del_status.id));
+            ui->insurancesSearchResult->setItem(i, j, id);
+}
+void MainWindow::on_agentsAdd_clicked()
+{
+            if (ui->agentsAddNameEdit->text() == "" || ui->agentsAddPhoneEdit->text() == "" || ui->agentsAddFeeEdit->text() == "" || ui->agentsAddIdEdit->text() == "") {
+            ui->statusbar->showMessage(QString("Поля не заполнены полностью"), 1000);
+            return;
+            }
+            if (!is_number(ui->agentsAddPhoneEdit->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("Паспорт задан некорректно"), 1000);
+            return;
+            }
+            Agent record_to_add;
+            record_to_add.fio = ui->agentsAddNameEdit->text().toStdString(), record_to_add.number = ui->agentsAddPhoneEdit->text().toStdString(), record_to_add.percent = ui->agentsAddFeeEdit->text().toInt(), record_to_add.pass = ui->agentsAddIdEdit->text().toStdString();
+            agentsDirectory.ADD(record_to_add);
+
+            ui->agentsTable->clear();
+            ui->agentsTable->setColumnCount(4);
+            ui->agentsTable->setRowCount(agentsDirectory.agents.size());
+            ui->agentsTable->setHorizontalHeaderLabels(QStringList() << "ФИО" << "Номер телефона" << "Процент" << "Паспорт");
+            ui->agentsTable->setColumnWidth(0, 320);
+            ui->agentsTable->setColumnWidth(1, 150);
+            ui->agentsTable->setColumnWidth(2, 150);
+            ui->agentsTable->setColumnWidth(3, 130);
+
+            for (int i = 0; i < agentsDirectory.agents.size(); i++)
+            {
+            int j = 0;
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].fio));
+            ui->agentsTable->setItem(i, j, fio);
+            j++;
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].number));
+            ui->agentsTable->setItem(i, j, number);
+            j++;
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[i].percent));
+            ui->agentsTable->setItem(i, j, percent);
+            j++;
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].pass));
+            ui->agentsTable->setItem(i, j, pass);
+            }
+
+            ui->statusbar->showMessage(QString("Поле добавлено"), 3000);
+}
+
+void MainWindow::on_agentsRemove_clicked()
+{
+            if (agentsDirectory.agents.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+            }
+
+            if (ui->agentsRemoveEdit->text() == "") {
+            ui->statusbar->showMessage(QString("Введите паспорт"), 1000);
+            return;
+            }
+
+            AgentHTNode* del_status = new AgentHTNode();
+            del_status = agentsDirectory.agentsHashTable.find(ui->agentsRemoveEdit->text().toStdString());
+            if (del_status == nullptr) {
+            ui->statusbar->showMessage(QString("Записи с таким паспортом нет в справочнике"), 1000);
+            return;
+            }
+            Agent* p = new Agent();
+            p->fio = del_status->value.fio;
+            p->number = del_status->value.number;
+            p->percent = del_status->value.percent;
+            p->pass = del_status->value.pass;
+
+            agentsDirectory.REMOVE(*p);
+
+            ui->agentsTable->clear();
+            ui->agentsTable->setColumnCount(4);
+            ui->agentsTable->setRowCount(agentsDirectory.agents.size());
+            ui->agentsTable->setHorizontalHeaderLabels(QStringList() << "ФИО" << "Номер телефона" << "Процент" << "Паспорт");
+            ui->agentsTable->setColumnWidth(0, 320);
+            ui->agentsTable->setColumnWidth(1, 150);
+            ui->agentsTable->setColumnWidth(2, 150);
+            ui->agentsTable->setColumnWidth(3, 130);
+
+            for (int i = 0; i < agentsDirectory.agents.size(); i++)
+            {
+            int j = 0;
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].fio));
+            ui->agentsTable->setItem(i, j, fio);
+            j++;
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].number));
+            ui->agentsTable->setItem(i, j, number);
+            j++;
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[i].percent));
+            ui->agentsTable->setItem(i, j, percent);
+            j++;
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[i].pass));
+            ui->agentsTable->setItem(i, j, pass);
+            }
+
+            ui->statusbar->showMessage(QString("Запись удалена"), 3000);
+}
+
+void MainWindow::on_agentsIDSearch_clicked()
+{
+            if (agentsDirectory.agents.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+            }
+            if (ui->agentsSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Введите значение"), 1000);
+            return;
+            }
+            AgentHTNode* del_status = new AgentHTNode();
+            del_status = agentsDirectory.agentsHashTable.find(ui->agentsSearchField->text().toStdString());
+            if (del_status == nullptr) {
+            ui->statusbar->showMessage(QString("Запись не найдена"), 1000);
+            return;
+            }
+            ui->agentsSearchResult->clear();
+            ui->agentsSearchResult->setColumnCount(5);
+            ui->agentsSearchResult->setRowCount(1);
+            ui->agentsSearchResult->setHorizontalHeaderLabels(QStringList() << "ФИО" << "Номер телефона" << "Процент" << "Паспорт" << "В массиве");
+            ui->agentsSearchResult->setColumnWidth(0, 70);
+            ui->agentsSearchResult->setColumnWidth(1, 250);
+            ui->agentsSearchResult->setColumnWidth(2, 150);
+            ui->agentsSearchResult->setColumnWidth(3, 150);
+            ui->agentsSearchResult->setColumnWidth(4, 130);
+            int i = 0;
+
+            int j = 0;
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(del_status->value.fio));
+            ui->agentsSearchResult->setItem(i, j, fio);
+            j++;
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(del_status->value.number));
+            ui->agentsSearchResult->setItem(i, j, number);
+            j++;
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(del_status->value.percent));
+            ui->agentsSearchResult->setItem(i, j, percent);
+            j++;
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(del_status->value.pass));
+            ui->agentsSearchResult->setItem(i, j, pass);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(del_status->id));
+            ui->agentsSearchResult->setItem(i, j, id);
+
+            ui->statusbar->showMessage(QString("Запись найдена"), 3000);
+}
+
+void MainWindow::on_agentsNameSearch_clicked()
+{
+            if (agentsDirectory.agents.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+            }
+            if (ui->agentsSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Введите значение"), 1000);
+            return;
+            }
+            std::string field_to_find = ui->agentsSearchField->text().toStdString();
+            AgentTreeNode* nodes = agentsDirectory.agentFIOTree.find(field_to_find, "_", 0, "_", agentsDirectory.agentFIOTree.root);
+            if (nodes == nullptr) {
+            ui->statusbar->showMessage(QString("Запись не найдена"), 2000);
+            return;
+            }
+
+            int count = 1;
+            AgentListNode* pp = nodes->clones.first;
+            while (pp) {
+            count++;
+            pp = pp->next;
+            }
+
+            ui->agentsSearchResult->clear();
+            ui->agentsSearchResult->setColumnCount(5);
+            ui->agentsSearchResult->setRowCount(count);
+            ui->agentsSearchResult->setHorizontalHeaderLabels(QStringList() << "ФИО" << "Номер телефона" << "Процент" << "Паспорт" << "В массиве");
+            ui->agentsSearchResult->setColumnWidth(0, 70);
+            ui->agentsSearchResult->setColumnWidth(1, 250);
+            ui->agentsSearchResult->setColumnWidth(2, 150);
+            ui->agentsSearchResult->setColumnWidth(3, 150);
+            ui->agentsSearchResult->setColumnWidth(4, 130);
+
+
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].fio));
+            ui->agentsSearchResult->setItem(0, 0, fio);
+
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].number));
+            ui->agentsSearchResult->setItem(0, 1, number);
+
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[nodes->id].percent));
+            ui->agentsSearchResult->setItem(0, 2, percent);
+
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].pass));
+            ui->agentsSearchResult->setItem(0, 3, pass);
+
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(nodes->id));
+            ui->agentsSearchResult->setItem(0, 4, id);
+
+            AgentListNode* p = nodes->clones.first;
+            int i = 1;
+            while (p) {
+            int j = 0;
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].fio));
+            ui->agentsSearchResult->setItem(i, j, fio);
+            j++;
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].number));
+            ui->agentsSearchResult->setItem(i, j, number);
+            j++;
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[p->id].percent));
+            ui->agentsSearchResult->setItem(i, j, percent);
+            j++;
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].pass));
+            ui->agentsSearchResult->setItem(i, j, pass);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(p->id));
+            ui->agentsSearchResult->setItem(i, j, id);
+            p = p->next;
+            i++;
+            }
+            ui->statusbar->showMessage(QString("Записи найдены"), 3000);
+}
+
+void MainWindow::on_agentsNumSearch_clicked()
+{
+            if (agentsDirectory.agents.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+            }
+            if (ui->agentsSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Введите значение"), 1000);
+            return;
+            }
+            std::string field_to_find = ui->agentsSearchField->text().toStdString();
+            AgentTreeNode* nodes = agentsDirectory.agentNumTree.find("_", field_to_find, 0, "_", agentsDirectory.agentNumTree.root);
+            if (nodes == nullptr) {
+            ui->statusbar->showMessage(QString("Запись не найдена"), 2000);
+            return;
+            }
+
+            int count = 1;
+            AgentListNode* pp = nodes->clones.first;
+            while (pp) {
+            count++;
+            pp = pp->next;
+            }
+
+            ui->agentsSearchResult->clear();
+            ui->agentsSearchResult->setColumnCount(5);
+            ui->agentsSearchResult->setRowCount(count);
+            ui->agentsSearchResult->setHorizontalHeaderLabels(QStringList() << "ФИО" << "Номер телефона" << "Процент" << "Паспорт" << "В массиве");
+            ui->agentsSearchResult->setColumnWidth(0, 70);
+            ui->agentsSearchResult->setColumnWidth(1, 250);
+            ui->agentsSearchResult->setColumnWidth(2, 150);
+            ui->agentsSearchResult->setColumnWidth(3, 150);
+            ui->agentsSearchResult->setColumnWidth(4, 130);
+
+
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].fio));
+            ui->agentsSearchResult->setItem(0, 0, fio);
+
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].number));
+            ui->agentsSearchResult->setItem(0, 1, number);
+
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[nodes->id].percent));
+            ui->agentsSearchResult->setItem(0, 2, percent);
+
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].pass));
+            ui->agentsSearchResult->setItem(0, 3, pass);
+
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(nodes->id));
+            ui->agentsSearchResult->setItem(0, 4, id);
+
+            AgentListNode* p = nodes->clones.first;
+            int i = 1;
+            while (p) {
+            int j = 0;
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].fio));
+            ui->agentsSearchResult->setItem(i, j, fio);
+            j++;
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].number));
+            ui->agentsSearchResult->setItem(i, j, number);
+            j++;
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[p->id].percent));
+            ui->agentsSearchResult->setItem(i, j, percent);
+            j++;
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].pass));
+            ui->agentsSearchResult->setItem(i, j, pass);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(p->id));
+            ui->agentsSearchResult->setItem(i, j, id);
+            p = p->next;
+            i++;
+            }
+            ui->statusbar->showMessage(QString("Записи найдены"), 3000);
+}
+
+void MainWindow::on_agentsFeeSearch_clicked()
+{
+            if (agentsDirectory.agents.size() == 0) {
+            ui->statusbar->showMessage(QString("Справочник пуст"), 1000);
+            return;
+            }
+            if (ui->agentsSearchField->text() == "") {
+            ui->statusbar->showMessage(QString("Введите значение"), 1000);
+            return;
+            }
+            int field_to_find = ui->agentsSearchField->text().toInt();
+            AgentTreeNode* nodes = agentsDirectory.agentPerTree.find("_", "_", field_to_find, "_", agentsDirectory.agentPerTree.root);
+            if (nodes == nullptr) {
+            ui->statusbar->showMessage(QString("Запись не найдена"), 2000);
+            return;
+            }
+
+            int count = 1;
+            AgentListNode* pp = nodes->clones.first;
+            while (pp) {
+            count++;
+            pp = pp->next;
+            }
+
+            ui->agentsSearchResult->clear();
+            ui->agentsSearchResult->setColumnCount(5);
+            ui->agentsSearchResult->setRowCount(count);
+            ui->agentsSearchResult->setHorizontalHeaderLabels(QStringList() << "ФИО" << "Номер телефона" << "Процент" << "Паспорт" << "В массиве");
+            ui->agentsSearchResult->setColumnWidth(0, 70);
+            ui->agentsSearchResult->setColumnWidth(1, 250);
+            ui->agentsSearchResult->setColumnWidth(2, 150);
+            ui->agentsSearchResult->setColumnWidth(3, 150);
+            ui->agentsSearchResult->setColumnWidth(4, 130);
+
+
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].fio));
+            ui->agentsSearchResult->setItem(0, 0, fio);
+
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].number));
+            ui->agentsSearchResult->setItem(0, 1, number);
+
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[nodes->id].percent));
+            ui->agentsSearchResult->setItem(0, 2, percent);
+
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[nodes->id].pass));
+            ui->agentsSearchResult->setItem(0, 3, pass);
+
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(nodes->id));
+            ui->agentsSearchResult->setItem(0, 4, id);
+
+            AgentListNode* p = nodes->clones.first;
+            int i = 1;
+            while (p) {
+            int j = 0;
+            QTableWidgetItem* fio = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].fio));
+            ui->agentsSearchResult->setItem(i, j, fio);
+            j++;
+            QTableWidgetItem* number = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].number));
+            ui->agentsSearchResult->setItem(i, j, number);
+            j++;
+            QTableWidgetItem* percent = new QTableWidgetItem(QString::number(agentsDirectory.agents[p->id].percent));
+            ui->agentsSearchResult->setItem(i, j, percent);
+            j++;
+            QTableWidgetItem* pass = new QTableWidgetItem(QString::fromStdString(agentsDirectory.agents[p->id].pass));
+            ui->agentsSearchResult->setItem(i, j, pass);
+            j++;
+            QTableWidgetItem* id = new QTableWidgetItem(QString::number(p->id));
+            ui->agentsSearchResult->setItem(i, j, id);
+            p = p->next;
+            i++;
+            }
+            ui->statusbar->showMessage(QString("Записи найдены"), 3000);
+}
+
+void MainWindow::on_agentsDebug_clicked()
+{
+            for (int i = 0; i < agentsDirectory.agents.size(); i++) {
+            std::cout << agentsDirectory.agents[i].fio << " - Birthday: " << agentsDirectory.agents[i].number << " - Phone number: "
+                      << agentsDirectory.agents[i].percent << " - ID: " << agentsDirectory.agents[i].pass << std::endl;
+            }
+            std::cout << std::endl;
+            agentsDirectory.agentsHashTable.print();
+            std::cout << std::endl;
+            agentsDirectory.agentFIOTree.print(agentsDirectory.agentFIOTree.root, 1);
+            std::cout << std::endl;
+            agentsDirectory.agentNumTree.print(agentsDirectory.agentNumTree.root, 1);
+            std::cout << std::endl;
+            agentsDirectory.agentPerTree.print(agentsDirectory.agentPerTree.root, 1);
+            std::cout << std::endl;
+
+            ui->statusbar->showMessage(QString("Отладочные данные выведены в консоль"), 3000);
+}
