@@ -165,7 +165,30 @@ void MainWindow::on_saveButton_clicked()
         ui->statusbar->showMessage(QString("Такой директории не существует"), 3000);
         return;
     }
+
+    std::string agents_file_path = "../" + ui->fileForm->text().toStdString() + "/agents.txt";
+    save_status = agentsDirectory.SAVE(agents_file_path);
+    if (save_status == 2) {
+        ui->statusbar->showMessage(QString("Файл повреждён"), 3000);
+        return;
+    }
+    if (save_status == 1) {
+        ui->statusbar->showMessage(QString("Такой директории не существует"), 3000);
+        return;
+    }
+
+    std::string ins_file_path = "../" + ui->fileForm->text().toStdString() + "/ins.txt";
+    save_status = insurancesDirectory.SAVE(ins_file_path);
+    if (save_status == 2) {
+        ui->statusbar->showMessage(QString("Файл повреждён"), 3000);
+        return;
+    }
+    if (save_status == 1) {
+        ui->statusbar->showMessage(QString("Такой директории не существует"), 3000);
+        return;
+    }
     ui->statusbar->showMessage(QString("Справочники сохранены"), 3000);
+
 }
 
 
@@ -978,11 +1001,35 @@ void MainWindow::on_agentsAdd_clicked()
             ui->statusbar->showMessage(QString("Поля не заполнены полностью"), 1000);
             return;
             }
+
+            if (is_number(ui->agentsAddNameEdit->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("ФИО задано некорректно"), 1000);
+            return;
+            }
             if (!is_number(ui->agentsAddPhoneEdit->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("Номер телефона задан некорректно"), 1000);
+            return;
+            }
+            if (!is_number(ui->agentsAddFeeEdit->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("Процент задан некорректно"), 1000);
+            return;
+            }
+            if (!is_number(ui->agentsAddIdEdit->text().toStdString()))
             {
             ui->statusbar->showMessage(QString("Паспорт задан некорректно"), 1000);
             return;
             }
+
+            AgentHTNode* del_status = new AgentHTNode();
+            del_status = agentsDirectory.agentsHashTable.find(ui->agentsAddIdEdit->text().toStdString());
+            if (del_status != nullptr) {
+            ui->statusbar->showMessage(QString("Записи с таким паспортом уже существует"), 1000);
+            return;
+            }
+
             Agent record_to_add;
             record_to_add.fio = ui->agentsAddNameEdit->text().toStdString(), record_to_add.number = ui->agentsAddPhoneEdit->text().toStdString(), record_to_add.percent = ui->agentsAddFeeEdit->text().toInt(), record_to_add.pass = ui->agentsAddIdEdit->text().toStdString();
             agentsDirectory.ADD(record_to_add);
@@ -1026,6 +1073,23 @@ void MainWindow::on_agentsRemove_clicked()
             ui->statusbar->showMessage(QString("Введите паспорт"), 1000);
             return;
             }
+
+            if (!is_number(ui->agentsRemoveEdit->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("Паспорт задан некорректно"), 1000);
+            return;
+            }
+
+            //PROVEROCHKA
+            key temp;
+            node* cur;
+            temp.agentpass = ui->agentsRemoveEdit->text().toStdString();
+            node* check_result = insurancesDirectory.insurancesAgentIdTree.find(temp, insurancesDirectory.insurancesAgentIdTree.root, cur);
+            if (check_result != nullptr) {
+            ui->statusbar->showMessage(QString("Удаление невозможно. Агент использован в страховке."), 3000);
+            return;
+            }
+            //PROVEROCHKA
 
             AgentHTNode* del_status = new AgentHTNode();
             del_status = agentsDirectory.agentsHashTable.find(ui->agentsRemoveEdit->text().toStdString());
@@ -1079,6 +1143,11 @@ void MainWindow::on_agentsIDSearch_clicked()
             ui->statusbar->showMessage(QString("Введите значение"), 1000);
             return;
             }
+            if (!is_number(ui->agentsSearchField->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("Паспорт задан некорректно"), 1000);
+            return;
+            }
             AgentHTNode* del_status = new AgentHTNode();
             del_status = agentsDirectory.agentsHashTable.find(ui->agentsSearchField->text().toStdString());
             if (del_status == nullptr) {
@@ -1123,6 +1192,11 @@ void MainWindow::on_agentsNameSearch_clicked()
             }
             if (ui->agentsSearchField->text() == "") {
             ui->statusbar->showMessage(QString("Введите значение"), 1000);
+            return;
+            }
+            if (is_number(ui->agentsSearchField->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("ФИО задано некорректно"), 1000);
             return;
             }
             std::string field_to_find = ui->agentsSearchField->text().toStdString();
@@ -1199,6 +1273,11 @@ void MainWindow::on_agentsNumSearch_clicked()
             ui->statusbar->showMessage(QString("Введите значение"), 1000);
             return;
             }
+            if (!is_number(ui->agentsSearchField->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("Номер телефона задан некорректно"), 1000);
+            return;
+            }
             std::string field_to_find = ui->agentsSearchField->text().toStdString();
             AgentTreeNode* nodes = agentsDirectory.agentNumTree.find("_", field_to_find, 0, "_", agentsDirectory.agentNumTree.root);
             if (nodes == nullptr) {
@@ -1271,6 +1350,11 @@ void MainWindow::on_agentsFeeSearch_clicked()
             }
             if (ui->agentsSearchField->text() == "") {
             ui->statusbar->showMessage(QString("Введите значение"), 1000);
+            return;
+            }
+            if (!is_number(ui->agentsSearchField->text().toStdString()))
+            {
+            ui->statusbar->showMessage(QString("Процент задан некорректно"), 1000);
             return;
             }
             int field_to_find = ui->agentsSearchField->text().toInt();

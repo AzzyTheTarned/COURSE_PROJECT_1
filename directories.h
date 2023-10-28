@@ -193,6 +193,20 @@ struct InsurancesDir {
         return 0;
     }
 
+    int SAVE(std::string filename)
+    {
+        std::ofstream TARGET_FILE(filename);
+        if (!TARGET_FILE.is_open()) return 1;
+        for (int i = 0; i < insurancesList.size(); i++) {
+            TARGET_FILE << insurancesList[i].agentpass << " ";
+            TARGET_FILE << insurancesList[i].clientpass << " ";
+            TARGET_FILE << insurancesList[i].strah << " ";
+            TARGET_FILE << insurancesList[i].stoim << std::endl;
+        }
+        TARGET_FILE.close();
+        return 0;
+    }
+
     int REMOVE(key _val) {
 
         if (_val.id==insurancesList.size()){
